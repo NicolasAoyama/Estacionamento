@@ -3,6 +3,7 @@ import br.com.uniamerica.Estacionamento.Entity.Condutor;
 import br.com.uniamerica.Estacionamento.Entity.Movimentacao;
 import br.com.uniamerica.Estacionamento.repository.CondutorRepository;
 import br.com.uniamerica.Estacionamento.repository.MovimentacaoRepository;
+import br.com.uniamerica.Estacionamento.service.CondutorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +16,48 @@ import java.util.List;
 @RequestMapping (value = "/api/condutor")
 public class CondutorController {
     @Autowired
-    private CondutorRepository condutorRepository;
+    private CondutorService condutorService;
     @Autowired
     private MovimentacaoRepository movimentacaoRepository;
-    /*@Autowired
-    private CondutorService condutorService;*/
+    @GetMapping
+    public ResponseEntity<?> idCondutor(@RequestParam("id") final Long id){
+        try{
+            return ResponseEntity.ok(condutorService.procurarCondutor(id));
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body("ERRO " + e.getMessage());
+        }
+    }
+    @GetMapping ({"/lista"})
+    public ResponseEntity<?> Listacondutor(){
+        return ResponseEntity.ok(condutorService.listaCondutor());
+    }
+    @GetMapping({"/ativos"})
+    public ResponseEntity<?> getAtivos(){
+        return ResponseEntity.ok(condutorService.ativosCondutor());
+    }
+    @PostMapping
+    public ResponseEntity<?> cadastrarCondutor(@RequestBody final Condutor condutor){
+        try{
+            this.condutorService.cadastrarCondutor(condutor);
+            return ResponseEntity.ok("Condutor cadastrado");
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body("ERRO" + e.getMessage());
+        }
+    }
+
+
+
+
+
+
+
+
+
+   /* @GetMapping ({"/all"})
+    public ResponseEntity<?> listacompleta(){
+        return ResponseEntity.ok(this.condutorRepository.findAll());
+    }
+
     @GetMapping
     public ResponseEntity<?> findById(@RequestParam("id") final Long id){
         final Condutor condutor = this.condutorRepository.findById(id).orElse(null);
@@ -27,23 +65,11 @@ public class CondutorController {
                 ? ResponseEntity.badRequest().body("Valor nao encontrado")
                 : ResponseEntity.ok(condutor);
     }
-    @GetMapping ({"/all"})
-    public ResponseEntity<?> listacompleta(){
-        return ResponseEntity.ok(this.condutorRepository.findAll());
-    }
     @GetMapping({"/ativo"})
     public ResponseEntity<?> ativos(){
         return ResponseEntity.ok(this.condutorRepository.findByAtivoTrue());
     }
-    @PostMapping
-    public ResponseEntity<?> cadastrarCondutor(@RequestBody final Condutor condutor){
-        try{
-            this.condutorRepository.save(condutor);
-            return ResponseEntity.ok("Condutor cadastrado");
-        } catch (Exception e){
-            return ResponseEntity.badRequest().body("ERRO" + e.getMessage());
-        }
-    }
+
     @PutMapping
     public ResponseEntity<?> alterar(
             @RequestParam("id") final Long id,
@@ -91,6 +117,6 @@ public class CondutorController {
         } catch (DataIntegrityViolationException e) {
             return ResponseEntity.internalServerError().body("Error" + e.getCause().getCause().getMessage());
         }
-    }
+    }*/
 
 }
