@@ -1,5 +1,4 @@
 package br.com.uniamerica.Estacionamento.repository;
-
 import br.com.uniamerica.Estacionamento.Entity.Condutor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

@@ -1,5 +1,4 @@
 package br.com.uniamerica.Estacionamento.Entity;
-import javax.annotation.processing.SupportedAnnotationTypes;
 import java.time.LocalDateTime;
 import jakarta.persistence.*;
 import lombok.Getter;
