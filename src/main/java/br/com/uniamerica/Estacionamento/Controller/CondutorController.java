@@ -29,6 +29,8 @@ public class CondutorController {
             return ResponseEntity.badRequest().body("ERRO " + e.getMessage());
         }
     }
+    /*O primeiro getmapping é diferente na questao do @RequestParam pois eu preciso de um parametro
+     que no caso é o id, como nos proximos eu nao preciso, posso colocar dessa maneira*/
     @GetMapping ({"/lista"})
     public ResponseEntity<?> Listacondutor(){
         return ResponseEntity.ok(condutorService.listaCondutor());
@@ -37,6 +39,12 @@ public class CondutorController {
     public ResponseEntity<?> getAtivos(){
         return ResponseEntity.ok(condutorService.ativosCondutor());
     }
+    /*Todos os metodos tem a mesma logica, o metodo POST serve para eu cadastrar dados, aqui estou cadastrando
+    na minha classe condutor
+    A diferenca aqui é que eu faco um requestbody para indicar que um objeto do tipo Condutor vai ser obtido no
+    body da requisicao (no body postman)
+    De resto é o mesmo do GET, faco um try catch para chamar a funcao cadastrarCondutor com os parametros da classe
+    condutor, e retorno uma mensagem de sucesso, e caso de errado eu pego a mensagem e retorno para o usuario*/
     @PostMapping
     public ResponseEntity<?> cadastrarCondutor(@RequestBody final Condutor condutor){
         try{
@@ -46,6 +54,9 @@ public class CondutorController {
             return ResponseEntity.badRequest().body("ERRO" + e.getMessage());
         }
     }
+    /*Mesma coisa dos metodos anteriores, metodo PUT para editar condutores, dessa vez eu chamo o @RequestParam para
+    identificar o id que devera ser atualizado, e chamo o @RequestBody para indicar que um objeto do tipo condutor
+    vai ser obtido no body da requisicao, como foi explicado antes.*/
     @PutMapping
     public ResponseEntity<?> editarCondutor(
             @RequestParam("id") final Long id,
