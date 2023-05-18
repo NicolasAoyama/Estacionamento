@@ -11,52 +11,50 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity
-@Table(name = "Movimentacoes", schema="public")
+@Table(name = "movimentacoes", schema="public")
 public class Movimentacao extends AbstractEntity{
-    @Getter
-    @Setter
+    @Getter @Setter
     @ManyToOne
-    @JoinColumn(name = "Movimentacao_veiculo", nullable = false)
+    @JoinColumn(name = "movimentacao_veiculo", nullable = false)
     private Veiculo veiculo;
-    @Getter
-    @Setter
+    @Getter @Setter
     @ManyToOne
     @JoinColumn(name = "Movimentacao_condutor", nullable = false)
     private Condutor condutor;
-    @Getter
-    @Setter
+    @Getter @Setter
     @Column(name = "entrada", nullable = false)
     private LocalDateTime entrada;
-    @Getter
-    @Setter
+    @Getter @Setter
     @Column(name = "saida", nullable = false)
     private LocalDateTime saida;
-    @Getter
-    @Setter
+    @Getter @Setter
+    @Column(name = "tempo_desconto")
+    private  Integer tempoTotalHora;
+    @Getter @Setter
+    @Column(name = "tempo_desconto")
+    private int tempoTotalMinuto;
+    @Getter @Setter
+    @Column(name = "tempo_desconto")
+    private int tempoMultaMinuto;
+    @Getter @Setter
+    @Column(name = "tempo_desconto")
+    private int tempoMultaHora;
+    @Getter @Setter
     @Column(name = "tempo_desconto")
     private LocalTime tempoDesconto;
-    @Getter
-    @Setter
-    @Column(name = "tempo_multa", nullable = false)
-    private LocalTime tempoMulta;
-    @Getter
-    @Setter
+    @Getter @Setter
     @Column(name = "valor_desconto")
     private LocalTime valorDesconto;
-    @Getter
-    @Setter
+    @Getter @Setter
     @Column(name = "valor_hora", nullable = false,unique = true)
     private BigDecimal valorHora;
-    @Getter
-    @Setter
+    @Getter @Setter
     @Column(name = "valor_multa", nullable = false,unique = true)
     private BigDecimal valorMulta;
-    @Getter
-    @Setter
+    @Getter @Setter
     @Column(name = "valor_total")
     private BigDecimal valorTotal;
-    @Getter
-    @Setter
+    @Getter @Setter
     @Column(name = "valor_hora_multa", nullable = false,unique = true)
     private BigDecimal valorHoraMulta;
 }

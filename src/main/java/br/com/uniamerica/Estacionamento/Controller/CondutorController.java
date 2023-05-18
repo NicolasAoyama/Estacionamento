@@ -5,12 +5,11 @@ import br.com.uniamerica.Estacionamento.service.CondutorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 /*Controller: O controller fornece os metodos para o meu programa, ele é como se fosse a chamada das funcoes do meu
 programa, recebendo tambem os resultados. Nesses controllers que eu vou fazer aqui estaram metodos get,put e tal
 */
-@Controller
+@RestController
 @RequestMapping (value = "/api/condutor")
 public class CondutorController {
     //autowired chama variaveis, funcoes de outras classes para a minha

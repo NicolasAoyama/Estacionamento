@@ -39,6 +39,8 @@ public class Configuracao extends AbstractEntity{
     @Getter @Setter
     @Column(name = "vagas_carro",length = 2)
     private int vagasCarro;
-
+    @Getter@Setter
+    @Column(name = "vagasvan", nullable = false)
+    private int vagasVan;
 }
 

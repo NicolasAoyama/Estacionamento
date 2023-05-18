@@ -7,14 +7,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import java.util.List;
 import java.util.Optional;
-
+/*As services seriam minhas funcoes desenvolvidas, importante entender a estrutura do programa, essas funcoes sao chamadas
+no meu controller, e retornam valores para o controller, essas funcoes chamam outras funcoes de verificacao dos repositorys*/
 @Service
 public class CondutorService {
+
     @Autowired
     private CondutorRepository condutorRepository;
+    /*Aqui eu coloco um optional para informar que eu posso receber um objeto do tipo condutor ou nao passando o parametro id
+    entao eu faco um if chamando o condutor repository que verifica se o id ja existe no meu bando de dados.
+    caso nao exista, o usuario é avisado, caso exista eu atribuo meu condutor com as informacoes do id pedido e retorno ao usuario*/
 
     public Optional<Condutor> procurarCondutor(Long id){
         if (!condutorRepository.idExistente(id) ){
@@ -24,6 +28,9 @@ public class CondutorService {
             return condutor;
         }
     }
+    /*Assim como explicado no controller, todas as funcoes aqui vao ter a logica bem parecida, so os detalhes vao
+    ser mudados. Nesse caso aqui eu crio uma lista de condutores e igualo ela a todos os condutores que eu tiver,
+    chamando um findall no condutorRepository*/
     public List<Condutor> listaCondutor(){
 
         List<Condutor> condutor = condutorRepository.findAll();

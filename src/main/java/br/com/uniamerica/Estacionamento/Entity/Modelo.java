@@ -8,15 +8,16 @@ import org.hibernate.envers.Audited;
 
 @Entity
 @Table(name = "Modelos", schema="public")
+@Audited
+@AuditTable(value = "modelo_audit",schema = "audit")
 public class Modelo extends AbstractEntity{
     @Getter
     @Setter
     @Column(name = "nome_modelo")
     private String nomeModelo;
-    @Getter
-    @Setter
+    @Getter @Setter
     @ManyToOne
-    @JoinColumn(name = "Modelo_marca",nullable = false)
+    @JoinColumn(name = "modelo_marca",nullable = false)
     private Marca marca;
 
 

@@ -8,11 +8,11 @@ import org.hibernate.envers.Audited;
 
 @Entity
 @Table(name = "Marcas", schema="public")
-
+@Audited
+@AuditTable(value = "marca_audit", schema = "audit")
 public class Marca extends AbstractEntity{
     @Getter
     @Setter
-    @Column(name = "nome_marca")
+    @Column(name = "nome_marca",nullable = false,unique = true)
     private String nomeMarca;
-
 }
