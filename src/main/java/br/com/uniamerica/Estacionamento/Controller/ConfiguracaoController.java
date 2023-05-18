@@ -1,6 +1,8 @@
 package br.com.uniamerica.Estacionamento.Controller;
+import br.com.uniamerica.Estacionamento.Entity.Condutor;
 import br.com.uniamerica.Estacionamento.Entity.Configuracao;
 import br.com.uniamerica.Estacionamento.repository.ConfiguracaoRepository;
+import br.com.uniamerica.Estacionamento.service.ConfiguracaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
@@ -12,34 +14,35 @@ import org.springframework.web.bind.annotation.*;
 public class ConfiguracaoController {
     @Autowired
     private ConfiguracaoRepository configuracaoRepository;
+    @Autowired
+    private ConfiguracaoService configuracaoService;
+
     @GetMapping
-    public ResponseEntity<?> findById(@RequestParam("id") final Long id){
-        final Configuracao configuracao = this.configuracaoRepository.findById(id).orElse(null);
-        return configuracao == null
-                ? ResponseEntity.badRequest().body("Valor nao encontrado")
-                : ResponseEntity.ok(configuracao);
+    public ResponseEntity<?> idConfig(@RequestParam("id") final Long id) {
+        try {
+            return ResponseEntity.ok(configuracaoService.procurarConfig(id));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("ERRO" + e.getMessage());
+        }
     }
     @PostMapping
     public ResponseEntity<?> cadastrarConfig(@RequestBody final Configuracao configuracao){
         try{
-            this.configuracaoRepository.save(configuracao);
+            this.configuracaoService.cadastraConfiguracao(configuracao);
             return ResponseEntity.ok("Configuracao cadastrada");
         } catch (Exception e){
             return ResponseEntity.badRequest().body("ERRO" + e.getMessage());
         }
     }
+
     @PutMapping
-    public ResponseEntity<?> alterar(
+    public ResponseEntity<?> editarConfig(
             @RequestParam("id") final Long id,
             @RequestBody final  Configuracao configuracao
     ) {
         try{
-            final Configuracao configuracaobanco  = this.configuracaoRepository.findById(id).orElse(null);
-            if (configuracaobanco == null || !configuracaobanco.getId().equals(configuracaobanco.getId())){
-                throw new RuntimeException("Registro nao encontrado, verifique");
-            }
-            this.configuracaoRepository.save(configuracao);
-            return ResponseEntity.ok("Atualizado");
+            this.configuracaoService.attConfiguracao(id,configuracao);
+            return ResponseEntity.ok("Registro Atualizado com sucesso");
         }
         catch (DataIntegrityViolationException e){
             return ResponseEntity.internalServerError().body("Error" + e.getCause().getCause().getMessage());

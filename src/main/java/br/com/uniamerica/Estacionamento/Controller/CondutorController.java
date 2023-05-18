@@ -80,45 +80,5 @@ public class CondutorController {
         } catch (DataIntegrityViolationException e){
             return ResponseEntity.internalServerError().body("Error" + e.getCause().getCause().getMessage());
         }
-
     }
-
-
-
-
-
-
-
-
-
-
-   /*
-    @DeleteMapping
-    public ResponseEntity<?> delete(@RequestParam("id") final Long id) {
-        try {
-            Condutor condutor = this.condutorRepository.findById(id).orElse(null);
-            final List<Movimentacao> movimentacao = this.movimentacaoRepository.findAll();
-            boolean found = false;
-
-            for (Movimentacao m : movimentacao) {
-                if (id == m.getCondutor().getId()) {
-                    found = true;
-                    break;
-                }
-            }
-            if (found) {
-                condutor.setAtivo(false);
-                condutorRepository.save(condutor);
-                return ResponseEntity.ok("Apagado");
-            } else if (condutor != null) {
-                condutorRepository.delete(condutor);
-                return ResponseEntity.ok("Apagado");
-            } else {
-                return ResponseEntity.badRequest().body("Registro nao encontrado, verifique");
-            }
-        } catch (DataIntegrityViolationException e) {
-            return ResponseEntity.internalServerError().body("Error" + e.getCause().getCause().getMessage());
-        }
-    }*/
-
 }

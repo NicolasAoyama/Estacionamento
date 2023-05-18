@@ -1,5 +1,6 @@
 package br.com.uniamerica.Estacionamento.service;
 
+import br.com.uniamerica.Estacionamento.Entity.Condutor;
 import br.com.uniamerica.Estacionamento.Entity.Configuracao;
 import br.com.uniamerica.Estacionamento.Entity.Marca;
 import br.com.uniamerica.Estacionamento.repository.ConfiguracaoRepository;
@@ -7,10 +8,22 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class ConfiguracaoService {
     @Autowired
     private ConfiguracaoRepository configuracaoRepository;
+    public Optional<Configuracao> procurarConfig(Long id){
+        if (!configuracaoRepository.ProcuraConfiguracaoId(id) ){
+            throw new RuntimeException("ID nao encontrado, verifique e tente novamente");
+        }else {
+            Optional<Configuracao> configuracao = this.configuracaoRepository.findById(id);
+            return configuracao;
+        }
+    }
+
+
 
     @Transactional
     public void cadastraConfiguracao(Configuracao configuracao){
