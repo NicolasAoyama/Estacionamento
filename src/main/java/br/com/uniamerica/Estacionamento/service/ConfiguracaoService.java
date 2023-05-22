@@ -22,12 +22,9 @@ public class ConfiguracaoService {
             return configuracao;
         }
     }
-
-
-
     @Transactional
     public void cadastraConfiguracao(Configuracao configuracao){
-        if("".equals(configuracao.getVagasCarro()) || "".equals(configuracao.getVagasMoto())){
+        if("".equals(configuracao.getVagasCarro()) || "".equals(configuracao.getVagasMoto()) || "".equals(configuracao.getVagasVan())){
             throw new RuntimeException("Seu estacionamento nao pode conter 0 vagas, verifique e tente novamente");
         }
         if("".equals(configuracao.getValorHora())){

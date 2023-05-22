@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.time.LocalTime;
 
 @Entity
-@Table(name = "Configuracoes", schema="public")
+@Table(name = "configuracoes", schema="public")
 public class Configuracao extends AbstractEntity{
     @Getter
     @Setter

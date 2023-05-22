@@ -1,15 +1,49 @@
 package br.com.uniamerica.Estacionamento.service;
 
+import br.com.uniamerica.Estacionamento.Entity.Condutor;
 import br.com.uniamerica.Estacionamento.Entity.Modelo;
 import br.com.uniamerica.Estacionamento.repository.ModeloRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ModeloService {
     @Autowired
     private ModeloRepository modeloRepository;
+
+
+
+    public Optional<Modelo> procurarModelo(Long id){
+        if (!modeloRepository.idExistente(id) ){
+            throw new RuntimeException("Esse ID nao esta no banco de dados, verifique e tente novamente");
+        }else {
+            Optional<Modelo> modelo = this.modeloRepository.findById(id);
+            return modelo;
+        }
+    }
+
+    public List<Modelo> listaModelo(){
+
+        List<Modelo> modelo = modeloRepository.findAll();
+        return modelo;
+    }
+    public List<Modelo> ativosModelo(){
+        List<Modelo> modelo = modeloRepository.findByAtivoTrue();
+        return modelo;
+    }
+
+
+
+
+
     @Transactional
     public void cadastraModelo(Modelo modelo){
         if("".equals(modelo.getMarca().getNomeMarca())){
@@ -36,5 +70,15 @@ public class ModeloService {
             throw new RuntimeException("Nome de modelo excedeu o limite (50 caracteres!)");
         }
         this.modeloRepository.save(modelo);
+    }
+    @Transactional(rollbackOn = Exception.class)
+    public void delete( @RequestParam("id") final Long id) {
+        Modelo modelo = this.modeloRepository.findById(id).orElse(null);
+        if(modeloRepository.modeloExistente(modelo.getId())){
+            modelo.setAtivo(false);
+            modeloRepository.save(modelo);
+        }else {
+            modeloRepository.delete(modelo);
+        }
     }
 }
