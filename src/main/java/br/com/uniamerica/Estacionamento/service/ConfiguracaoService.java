@@ -15,7 +15,7 @@ public class ConfiguracaoService {
     @Autowired
     private ConfiguracaoRepository configuracaoRepository;
     public Optional<Configuracao> procurarConfig(Long id){
-        if (!configuracaoRepository.ProcuraConfiguracaoId(id) ){
+        if (!configuracaoRepository.idExistente(id) ){
             throw new RuntimeException("ID nao encontrado, verifique e tente novamente");
         }else {
             Optional<Configuracao> configuracao = this.configuracaoRepository.findById(id);

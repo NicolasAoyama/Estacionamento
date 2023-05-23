@@ -63,9 +63,9 @@ public class Movimentacao extends AbstractEntity{
     public String toString(){
 
         return
-                        ("############- Estacionamento Mercosul -#################" + "\n") +
-                        ("############- Obrigado por nos escolher! -#####################") +
-                        ("\n" + "#####-  RECIBO  -################################" + "\n") +
+                        ("############- Estacionamento Mercosul -######################\n") +
+                        ("############- Obrigado por nos escolher! -###################\n") +
+                        ("############-  RECIBO  -#####################################\n") +
                         ("Condutor: " + getCondutor().getNomeCondutor() + "############\n") +
                         ("Veiculo: " + "################################################\n" +
                         "PLACA: " + getVeiculo().getPlaca() +  "########################\n" +
@@ -76,21 +76,21 @@ public class Movimentacao extends AbstractEntity{
                         "MARCA: " + getVeiculo().getModelo().getMarca().getNomeMarca()+"\n\n") +
                         ("Entrada: " + getEntrada() + "################################\n") +
                         ("Saida: " + getSaida() + "####################################\n") +
-                        ("Tempo total do condutor: " + getCondutor().getTempoTotal() + "Horas" +"\n")+
+                        ("Tempo Total do Condutor: " + getCondutor().getTempoTotal() + "Horas" +"\n")+
                         ("Tempo de Desconto: " + getCondutor().getTempoDesconto() + "Horas" + "\n")+
-                        ("Tempo pago acumulado: " + getCondutor().getTempoPago() + "Horas" + "\n\n") +
-                        ("############- CONTROLE DE TEMPO -###########################"+"\n") +
-                        ("Tempo Total Estacionado: " + getTempoTotalHora()+ " Horas" +  "\n" +
-                        "Tempo Total Estacionado:" + getTempoTotalMinuto() + " Minutos"+ "\n") +
-                        ("Tempo Excedito: " + getTempoMultaHora() + " Horas" +  "\n"+
-                        "Tempo Excedito:"  + getTempoMultaMinuto() + " Minutos" +"\n") +
-                        ("Tempo De Desconto: " + getTempoDesconto() + " Horas" +"\n\n") +
-                        ("#########- PAGAMENTO -##########################################" + "\n") +
+                        ("Tempo Pago Acumulado: " + getCondutor().getTempoPago() + "Horas\n\n") +
+                        ("############- CONTROLE DE TEMPO -###########################\n") +
+                        ("Tempo Total Estacionado: " + getTempoTotalHora()+ " Horas\n" +
+                        "Tempo Total Estacionado:" + getTempoTotalMinuto() + " Minutos\n") +
+                        ("Tempo Excedido: " + getTempoMultaHora() + " Horas\n"+
+                        "Tempo Excedido:"  + getTempoMultaMinuto() + " Minutos\n") +
+                        ("Tempo De Desconto: " + getTempoDesconto() + " Horas\n\n") +
+                        ("#########- PAGAMENTO -##########################################\n") +
                         ("Valor Por Hora: R$ " + getValorHora() + "\n") +
-                        ("Valor por Minuto Multa R$ " + getValorHoraMulta() + "\n") +
+                        ("Multa por Minuto: R$ " + getValorHoraMulta() + "\n") +
                         ("Desconto: R$ " + "-" + getValorDesconto() + "\n") +
-                        ("Valor a pagar da Multa R$ " + getValorMulta() + "\n") +
-                        ("Valor a pagar por tempo Estacionado dentro do Horário (sem multa) R$ " + (getTempoTotalHora().intValue() - getTempoMultaHora() ) * getValorHora().intValue() + "\n") +
-                        ("Valor Total A pagar  R$ " + getValorTotal() + "\n");
+                        ("Valor a pagar de Multa: R$ " + getValorMulta() + "\n") +
+                        ("Total sem Multa: R$ " + (getTempoTotalHora().intValue() - getTempoMultaHora() ) * getValorHora().intValue() + "\n") +
+                        ("Valor Total: R$ " + getValorTotal()  + "\n");
 
     }}
