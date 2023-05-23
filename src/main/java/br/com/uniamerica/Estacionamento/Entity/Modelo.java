@@ -8,8 +8,6 @@ import org.hibernate.envers.Audited;
 
 @Entity
 @Table(name = "modelos", schema="public")
-@Audited
-@AuditTable(value = "modelo_audit",schema = "audit")
 public class Modelo extends AbstractEntity{
     @Getter
     @Setter
