@@ -16,11 +16,10 @@ public abstract class AbstractEntity {
     private LocalDateTime cadastro;
     @Getter @Setter
     @Column(name = "dtAtualizacao")
-    private LocalDateTime atualizacao;
+    private LocalDateTime atualizacao = LocalDateTime.now();;
     @Getter @Setter
     @Column(name = "ativo", nullable = false)
     boolean ativo;
-
     @PrePersist
     private void prePersist(){
         this.cadastro = LocalDateTime.now();

@@ -28,19 +28,19 @@ public class Movimentacao extends AbstractEntity{
     @Column(name = "saida", nullable = false)
     private LocalDateTime saida;
     @Getter @Setter
-    @Column(name = "tempo_desconto")
+    @Column(name = "tempoTotalHora")
     private  Integer tempoTotalHora;
     @Getter @Setter
-    @Column(name = "tempo_desconto")
+    @Column(name = "tempoTotalMinuto")
     private int tempoTotalMinuto;
     @Getter @Setter
-    @Column(name = "tempo_desconto")
+    @Column(name = "tempoMultaMinuto")
     private int tempoMultaMinuto;
     @Getter @Setter
-    @Column(name = "tempo_desconto")
+    @Column(name = "tempoMultaHora")
     private int tempoMultaHora;
     @Getter @Setter
-    @Column(name = "tempo_desconto")
+    @Column(name = "tempoDesconto")
     private LocalTime tempoDesconto;
     @Getter @Setter
     @Column(name = "valor_desconto")

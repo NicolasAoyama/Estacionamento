@@ -55,9 +55,9 @@ public class CondutorService {
             throw new RuntimeException("Telefone inválido, ferifique e tente novamente");
         } else if(condutor.getCadastro() == null){
             throw new RuntimeException("Data invalida, verifique e tente novamente");
-        } /*else if (condutorRepository.nomeExistente(condutor.getNomeCondutor())) {
+        } else if (condutorRepository.nomeExistente(condutor.getNomeCondutor())) {
             throw new RuntimeException("Esse nome ja esta cadastrado");
-        } */else if (condutorRepository.idExistente(condutor.getId())) {
+        } else if (condutorRepository.idExistente(condutor.getId())) {
             throw new RuntimeException("ID Repetido");
         } else if (condutorRepository.telefoneExistente(condutor.getTelefone())) {
             throw new RuntimeException("Telefone ja cadastrado. Verifique e tente novamente.");
