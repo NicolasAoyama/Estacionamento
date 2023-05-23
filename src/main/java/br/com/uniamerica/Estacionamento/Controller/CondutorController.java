@@ -66,7 +66,7 @@ public class CondutorController {
             return ResponseEntity.internalServerError().body("Erro: " + e.getCause().getCause().getMessage());
         }
         catch (RuntimeException e){
-            return ResponseEntity.internalServerError().body("Erro: " + e.getMessage());
+            return ResponseEntity.internalServerError().body("Erro:  TA DANDO ERRADO AQ O" + e.getMessage());
         }
     }
     @DeleteMapping
