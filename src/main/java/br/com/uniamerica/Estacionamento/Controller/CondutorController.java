@@ -31,7 +31,7 @@ public class CondutorController {
     /*O primeiro getmapping é diferente na questao do @RequestParam pois eu preciso de um parametro
      que no caso é o id, como nos proximos eu nao preciso, posso colocar dessa maneira*/
     @GetMapping ({"/lista"})
-    public ResponseEntity<?> Listacondutor(){
+    public ResponseEntity<?> ListaCondutor(){
         return ResponseEntity.ok(condutorService.listaCondutor());
     }
     @GetMapping({"/ativos"})
@@ -57,10 +57,7 @@ public class CondutorController {
     identificar o id que devera ser atualizado, e chamo o @RequestBody para indicar que um objeto do tipo condutor
     vai ser obtido no body da requisicao, como foi explicado antes.*/
     @PutMapping
-    public ResponseEntity<?> editarCondutor(
-            @RequestParam("id") final Long id,
-            @RequestBody final  Condutor condutor
-    ) {
+    public ResponseEntity<?> editarCondutor(@RequestParam("id") final Long id, @RequestBody final  Condutor condutor){
         try{
             this.condutorService.editarCondutor(id,condutor);
             return ResponseEntity.ok("Condutor atualizado");

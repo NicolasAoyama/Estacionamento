@@ -1,19 +1,11 @@
 package br.com.uniamerica.Estacionamento.Controller;
 
-import br.com.uniamerica.Estacionamento.Entity.Condutor;
 import br.com.uniamerica.Estacionamento.Entity.Modelo;
-import br.com.uniamerica.Estacionamento.Entity.Movimentacao;
-import br.com.uniamerica.Estacionamento.repository.ModeloRepository;
-import br.com.uniamerica.Estacionamento.repository.MovimentacaoRepository;
-import br.com.uniamerica.Estacionamento.repository.VeiculoRepository;
 import br.com.uniamerica.Estacionamento.service.ModeloService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
-
 @RestController
 @RequestMapping (value = "/api/modelo")
 public class ModeloController {

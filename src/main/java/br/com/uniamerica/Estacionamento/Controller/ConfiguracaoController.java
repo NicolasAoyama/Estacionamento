@@ -1,19 +1,14 @@
 package br.com.uniamerica.Estacionamento.Controller;
-import br.com.uniamerica.Estacionamento.Entity.Condutor;
 import br.com.uniamerica.Estacionamento.Entity.Configuracao;
-import br.com.uniamerica.Estacionamento.repository.ConfiguracaoRepository;
 import br.com.uniamerica.Estacionamento.service.ConfiguracaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping (value = "/api/configuracao")
 public class ConfiguracaoController {
-    @Autowired
-    private ConfiguracaoRepository configuracaoRepository;
     @Autowired
     private ConfiguracaoService configuracaoService;
 

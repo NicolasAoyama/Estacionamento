@@ -16,7 +16,7 @@ public abstract class AbstractEntity {
     private LocalDateTime cadastro;
     @Getter @Setter
     @Column(name = "dtAtualizacao")
-    private LocalDateTime atualizacao = LocalDateTime.now();;
+    private LocalDateTime atualizacao;
     @Getter @Setter
     @Column(name = "ativo", nullable = false)
     boolean ativo;

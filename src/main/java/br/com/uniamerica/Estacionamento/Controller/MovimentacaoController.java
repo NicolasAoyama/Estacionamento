@@ -64,5 +64,14 @@ public class MovimentacaoController {
         } catch (DataIntegrityViolationException e) {
             return ResponseEntity.internalServerError().body("Erro: " + e.getCause().getCause().getMessage());
         }
-    }
+    }/*
+    @PutMapping(value = "/finalizar")
+    public ResponseEntity<?> finalizar(@RequestParam("id")final Long id,@RequestBody final  Movimentacao movimentacao){
+        try{
+            return ResponseEntity.ok(movimentacaoService.finalizarMovimentacao(id,movimentacao));
+        }
+        catch (Exception e){
+            return ResponseEntity.badRequest().body("Error " + e.getMessage());
+        }
+    }*/
 }
