@@ -5,6 +5,7 @@ import lombok.Setter;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 
+import java.math.BigDecimal;
 import java.time.LocalTime;
 /*As entitys seriam onde eu crio minhas variaveis, aqui eu configuro tambem algumas coisas do banco de dados
 por exemplo o nome das tabelas. todos os @ sao anotations, facilitam a criacao do codigo*/
@@ -27,6 +28,6 @@ public class Condutor extends AbstractEntity{
     @Column(name = "tempogasto")
     private int tempoTotal;
     @Getter @Setter
-    @Column(name = "tempo_desconto")
+    @Column(name = "tempoDesconto")
     private int tempoDesconto;
    }

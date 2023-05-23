@@ -20,7 +20,7 @@ public class Configuracao extends AbstractEntity{
     private BigDecimal valorMinutoMulta;
     @Getter @Setter
     @Column(name = "inicio_expediente", nullable = false)
-    private LocalTime inicioExtediente;
+    private LocalTime inicioExpediente;
     @Getter @Setter
     @Column(name = "fim_expediente", nullable = false)
     private LocalTime fimExpediente;
