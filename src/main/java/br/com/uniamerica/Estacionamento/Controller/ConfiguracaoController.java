@@ -22,7 +22,7 @@ public class ConfiguracaoController {
         try {
             return ResponseEntity.ok(configuracaoService.procurarConfig(id));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("ERRO" + e.getMessage());
+            return ResponseEntity.badRequest().body("Erro: " + e.getMessage());
         }
     }
     @PostMapping
@@ -31,7 +31,7 @@ public class ConfiguracaoController {
             this.configuracaoService.cadastraConfiguracao(configuracao);
             return ResponseEntity.ok("Configuracao cadastrada");
         } catch (Exception e){
-            return ResponseEntity.badRequest().body("ERRO" + e.getMessage());
+            return ResponseEntity.badRequest().body("Erro: " + e.getMessage());
         }
     }
 
@@ -42,13 +42,13 @@ public class ConfiguracaoController {
     ) {
         try{
             this.configuracaoService.attConfiguracao(id,configuracao);
-            return ResponseEntity.ok("Registro Atualizado com sucesso");
+            return ResponseEntity.ok("Configuracao atualizada");
         }
         catch (DataIntegrityViolationException e){
-            return ResponseEntity.internalServerError().body("Error" + e.getCause().getCause().getMessage());
+            return ResponseEntity.internalServerError().body("Erro: " + e.getCause().getCause().getMessage());
         }
         catch (RuntimeException e){
-            return ResponseEntity.internalServerError().body("ERROR" + e.getMessage());
+            return ResponseEntity.internalServerError().body("Erro: " + e.getMessage());
         }
     }
 }

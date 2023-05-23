@@ -25,7 +25,7 @@ public class CondutorController {
         try{
             return ResponseEntity.ok(condutorService.procurarCondutor(id));
         } catch (Exception e){
-            return ResponseEntity.badRequest().body("ERRO " + e.getMessage());
+            return ResponseEntity.badRequest().body("Erro: " + e.getMessage());
         }
     }
     /*O primeiro getmapping é diferente na questao do @RequestParam pois eu preciso de um parametro
@@ -50,7 +50,7 @@ public class CondutorController {
             this.condutorService.cadastrarCondutor(condutor);
             return ResponseEntity.ok("Condutor cadastrado");
         } catch (Exception e){
-            return ResponseEntity.badRequest().body("ERRO" + e.getMessage());
+            return ResponseEntity.badRequest().body("Erro: " + e.getMessage());
         }
     }
     /*Mesma coisa dos metodos anteriores, metodo PUT para editar condutores, dessa vez eu chamo o @RequestParam para
@@ -63,22 +63,22 @@ public class CondutorController {
     ) {
         try{
             this.condutorService.editarCondutor(id,condutor);
-            return ResponseEntity.ok("Registro Atualizado com sucesso");
+            return ResponseEntity.ok("Condutor atualizado");
         }
         catch (DataIntegrityViolationException e){
-            return ResponseEntity.internalServerError().body("Error" + e.getCause().getCause().getMessage());
+            return ResponseEntity.internalServerError().body("Erro: " + e.getCause().getCause().getMessage());
         }
         catch (RuntimeException e){
-            return ResponseEntity.internalServerError().body("ERROR" + e.getMessage());
+            return ResponseEntity.internalServerError().body("Erro: " + e.getMessage());
         }
     }
     @DeleteMapping
     public ResponseEntity<?> delete( @RequestParam("id") final Long id){
         try {
             this.condutorService.delete(id);
-            return ResponseEntity.ok("Registro Desativado");
+            return ResponseEntity.ok("Condutor Desativado");
         } catch (DataIntegrityViolationException e){
-            return ResponseEntity.internalServerError().body("Error" + e.getCause().getCause().getMessage());
+            return ResponseEntity.internalServerError().body("Erro: " + e.getCause().getCause().getMessage());
         }
     }
 }

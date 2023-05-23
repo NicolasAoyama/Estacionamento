@@ -20,7 +20,7 @@ public class MarcaController {
         try {
             return ResponseEntity.ok(marcaService.procurarMarca(id));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("ERRO " + e.getMessage());
+            return ResponseEntity.badRequest().body("Erro: " + e.getMessage());
         }
     }
     @GetMapping ({"/lista"})
@@ -37,7 +37,7 @@ public class MarcaController {
             this.marcaService.cadastraMarca(marca);
             return ResponseEntity.ok("Marca cadastrada");
         } catch (Exception e){
-            return ResponseEntity.badRequest().body("ERRO " + e.getMessage());
+            return ResponseEntity.badRequest().body("Erro: " + e.getMessage());
         }
     }
     @PutMapping
@@ -47,13 +47,13 @@ public class MarcaController {
     ) {
         try{
             this.marcaService.editarMarca(id,marca);
-            return ResponseEntity.ok("Registro Atualizado com sucesso");
+            return ResponseEntity.ok("Marca atualizada");
         }
         catch (DataIntegrityViolationException e){
-            return ResponseEntity.internalServerError().body("Error" + e.getCause().getCause().getMessage());
+            return ResponseEntity.internalServerError().body("Erro: " + e.getCause().getCause().getMessage());
         }
         catch (RuntimeException e){
-            return ResponseEntity.internalServerError().body("ERROR " + e.getMessage());
+            return ResponseEntity.internalServerError().body("Erro: " + e.getMessage());
         }
     }
 
@@ -61,9 +61,9 @@ public class MarcaController {
     public ResponseEntity<?> delete( @RequestParam("id") final Long id){
         try {
             this.marcaService.deletarMarca(id);
-            return ResponseEntity.ok("Registro Desativado");
+            return ResponseEntity.ok("Marca Desativada");
         } catch (DataIntegrityViolationException e){
-            return ResponseEntity.internalServerError().body("Error" + e.getCause().getCause().getMessage());
+            return ResponseEntity.internalServerError().body("Erro: " + e.getCause().getCause().getMessage());
         }
     }
 }

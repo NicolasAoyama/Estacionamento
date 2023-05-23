@@ -25,7 +25,7 @@ public class ModeloController {
         try{
             return ResponseEntity.ok(modeloService.procurarModelo(id));
         } catch (Exception e){
-            return ResponseEntity.badRequest().body("ERRO " + e.getMessage());
+            return ResponseEntity.badRequest().body("Erro: " + e.getMessage());
         }
     }
 
@@ -43,7 +43,7 @@ public class ModeloController {
             this.modeloService.cadastraModelo(modelo);
             return ResponseEntity.ok("Modelo cadastrado");
         } catch (Exception e){
-            return ResponseEntity.badRequest().body("ERRO " + e.getMessage());
+            return ResponseEntity.badRequest().body("Erro: " + e.getMessage());
         }
     }
     @PutMapping
@@ -53,30 +53,22 @@ public class ModeloController {
     ) {
         try{
             this.modeloService.attModelo(id,modelo);
-            return ResponseEntity.ok("Registro Atualizado com sucesso");
+            return ResponseEntity.ok("Modelo atualizado");
         }
         catch (DataIntegrityViolationException e){
-            return ResponseEntity.internalServerError().body("Error " + e.getCause().getCause().getMessage());
+            return ResponseEntity.internalServerError().body("Erro: " + e.getCause().getCause().getMessage());
         }
         catch (RuntimeException e){
-            return ResponseEntity.internalServerError().body("ERROR " + e.getMessage());
+            return ResponseEntity.internalServerError().body("Erro: " + e.getMessage());
         }
     }
     @DeleteMapping
     public ResponseEntity<?> delete( @RequestParam("id") final Long id){
         try {
             this.modeloService.delete(id);
-            return ResponseEntity.ok("Registro Desativado");
+            return ResponseEntity.ok("Modelo desativado");
         } catch (DataIntegrityViolationException e){
-            return ResponseEntity.internalServerError().body("Error" + e.getCause().getCause().getMessage());
+            return ResponseEntity.internalServerError().body("Erro: " + e.getCause().getCause().getMessage());
         }
     }
-
-
-
-
-
-
-
-
 }

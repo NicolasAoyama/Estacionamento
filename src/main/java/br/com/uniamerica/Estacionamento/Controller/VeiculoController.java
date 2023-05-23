@@ -20,7 +20,7 @@ public class VeiculoController {
         try{
             return ResponseEntity.ok(veiculoService.procurarVeiculo(id));
         } catch (Exception e){
-            return ResponseEntity.badRequest().body("ERRO " + e.getMessage());
+            return ResponseEntity.badRequest().body("Erro: " + e.getMessage());
         }
     }
     @GetMapping ({"/lista"})
@@ -38,7 +38,7 @@ public class VeiculoController {
             this.veiculoService.cadastraVeiculo(veiculo);
             return ResponseEntity.ok("Veiculo cadastrado");
         } catch (Exception e){
-            return ResponseEntity.badRequest().body("ERRO " + e.getMessage());
+            return ResponseEntity.badRequest().body("Erro: " + e.getMessage());
         }
     }
     @PutMapping
@@ -48,20 +48,20 @@ public class VeiculoController {
     ) {
         try{
             this.veiculoService.atualizaVeiculo(id,veiculo);
-            return ResponseEntity.ok("Registro Atualizado com sucesso");
+            return ResponseEntity.ok("Veiculo atualizado");
         }
         catch (DataIntegrityViolationException e){
-            return ResponseEntity.internalServerError().body("Error " + e.getCause().getCause().getMessage());
+            return ResponseEntity.internalServerError().body("Erro: " + e.getCause().getCause().getMessage());
         }
         catch (RuntimeException e){
-            return ResponseEntity.internalServerError().body("ERROR " + e.getMessage());
+            return ResponseEntity.internalServerError().body("Erro: " + e.getMessage());
         }
     }
     @DeleteMapping
     public ResponseEntity<?> delete( @RequestParam("id") final Long id){
         try {
             this.veiculoService.deleteVeiculo(id);
-            return ResponseEntity.ok("Registro Desativado");
+            return ResponseEntity.ok("Veiculo desativado");
         } catch (DataIntegrityViolationException e){
             return ResponseEntity.internalServerError().body("Error " + e.getCause().getCause().getMessage());
         }

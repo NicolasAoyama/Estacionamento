@@ -19,7 +19,7 @@ public class MovimentacaoController {
         try {
             return ResponseEntity.ok(movimentacaoService.procurarMovimentacao(id));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("ERRO " + e.getMessage());
+            return ResponseEntity.badRequest().body("Erro: " + e.getMessage());
         }
     }
 
@@ -37,9 +37,9 @@ public class MovimentacaoController {
     public ResponseEntity<?> cadastrarMovimentacao(@RequestBody final Movimentacao movimentacao) {
         try {
             this.movimentacaoService.cadastraMovimentacao(movimentacao);
-            return ResponseEntity.ok("Condutor cadastrado");
+            return ResponseEntity.ok("Movimentacao cadastrada");
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("ERRO" + e.getMessage());
+            return ResponseEntity.badRequest().body("Erro: " + e.getMessage());
         }
     }
     @PutMapping
@@ -49,20 +49,20 @@ public class MovimentacaoController {
     ) {
         try {
             this.movimentacaoService.attMovimentacao(id, movimentacao);
-            return ResponseEntity.ok("Registro Atualizado com sucesso");
+            return ResponseEntity.ok("Movimentacao atualizada com sucesso");
         } catch (DataIntegrityViolationException e) {
-            return ResponseEntity.internalServerError().body("Error" + e.getCause().getCause().getMessage());
+            return ResponseEntity.internalServerError().body("Erro: " + e.getCause().getCause().getMessage());
         } catch (RuntimeException e) {
-            return ResponseEntity.internalServerError().body("ERROR" + e.getMessage());
+            return ResponseEntity.internalServerError().body("Erro: " + e.getMessage());
         }
     }
     @DeleteMapping
     public ResponseEntity<?> delete(@RequestParam("id") final Long id) {
         try {
             this.movimentacaoService.deleteMovimentacao(id);
-            return ResponseEntity.ok("Registro Desativado");
+            return ResponseEntity.ok("Movimentacao desativada");
         } catch (DataIntegrityViolationException e) {
-            return ResponseEntity.internalServerError().body("Error" + e.getCause().getCause().getMessage());
+            return ResponseEntity.internalServerError().body("Erro: " + e.getCause().getCause().getMessage());
         }
     }
 }
