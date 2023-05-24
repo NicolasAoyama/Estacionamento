@@ -61,33 +61,32 @@ public class Movimentacao extends AbstractEntity{
 
         return
                         ("############- Estacionamento Mercosul -######################\n") +
-                        ("############- Obrigado por nos escolher! -###################\n") +
-                        ("############-  RECIBO  -#####################################\n") +
-                        ("Condutor: " + getCondutor().getNomeCondutor() + "############\n") +
-                        ("Veiculo: " + "################################################\n" +
-                        "PLACA: " + getVeiculo().getPlaca() +  "########################\n" +
-                        "COR: "+ getVeiculo().getCor()  + "#############################\n" +
-                        "TIPO: " + getVeiculo().getTipo() + "###########################\n" +
-                        "ANO: " + getVeiculo().getAno() + "#############################\n" +
-                        "MODELO: " + getVeiculo().getModelo().getNomeModelo() + "##########\n" +
-                        "MARCA: " + getVeiculo().getModelo().getMarca().getNomeMarca()+"\n\n") +
-                        ("Entrada: " + getEntrada() + "################################\n") +
-                        ("Saida: " + getSaida() + "####################################\n") +
-                        ("Tempo Total do Condutor: " + getCondutor().getTempoTotal() + "Horas" +"\n")+
-                        ("Tempo de Desconto: " + getCondutor().getTempoDesconto() + "Horas" + "\n")+
-                        ("Tempo Pago Acumulado: " + getCondutor().getTempoPago() + "Horas\n\n") +
-                        ("############- CONTROLE DE TEMPO -###########################\n") +
-                        ("Tempo Total Estacionado: " + getTempoTotalHora()+ " Horas\n" +
-                        "Tempo Total Estacionado:" + getTempoTotalMinuto() + " Minutos\n") +
-                        ("Tempo Excedido: " + getTempoMultaHora() + " Horas\n"+
-                        "Tempo Excedido:"  + getTempoMultaMinuto() + " Minutos\n") +
-                        ("Tempo De Desconto: " + getTempoDesconto() + " Horas\n\n") +
-                        ("#########- PAGAMENTO -##########################################\n") +
-                        ("Valor Por Hora: R$ " + getValorHora2() + "\n") +
-                        ("Multa por Minuto: R$ " + getValorHoraMulta() + "\n") +
-                        ("Desconto: R$ " + "-" + getValorDesconto() + "\n") +
-                        ("Valor a pagar de Multa: R$ " + getValorMulta() + "\n") +
-                        ("Total sem Multa: R$ " + (getTempoTotalHora().intValue() - getTempoMultaHora() ) * getValorHora2().intValue() + "\n") +
-                        ("Valor Total: R$ " + getValorTotal()  + "\n");
+                        ("Obrigado por nos escolher!\n") +
+                        ("#####################-  RECIBO  -######################\n") +
+                        ("Condutor: " + getCondutor().getNomeCondutor() + "######################\n") +
+                        ("PLACA: " + getVeiculo().getPlaca() +  "######################\n" +
+                        "COR: "+ getVeiculo().getCor()  + "######################\n" +
+                        "TIPO: " + getVeiculo().getTipo() + "######################\n" +
+                        "ANO: " + getVeiculo().getAno() + "######################\n" +
+                        "MODELO: " + getVeiculo().getModelo().getNomeModelo() + "######################\n" +
+                        "MARCA: " + getVeiculo().getModelo().getMarca().getNomeMarca()+"######################\n\n") +
+                        ("Entrada: " + getEntrada() + "######################\n") +
+                        ("Saida: " + getSaida() + "######################\n") +
+                        ("Tempo Total do Condutor: " + getCondutor().getTempoTotal() + "Horas -######################\n")+
+                        ("Tempo de Desconto: " + getCondutor().getTempoDesconto() + "Horas -######################\n")+
+                        ("Tempo Pago Acumulado: " + getCondutor().getTempoPago() + "Horas -######################\n\n") +
+                        ("###############- CONTROLE DE TEMPO -######################\n") +
+                        ("Tempo Total Estacionado: " + getTempoTotalHora()+ " Horas -######################\n" +
+                        "Tempo Total Estacionado:" + getTempoTotalMinuto() + " Minutos -######################\n") +
+                        ("Tempo Excedido: " + getTempoMultaHora() + " Horas -######################\n"+
+                        "Tempo Excedido:"  + getTempoMultaMinuto() + " Minutos -######################\n") +
+                        ("Tempo De Desconto: " + getTempoDesconto() + " Horas -######################\n\n") +
+                        ("####################- PAGAMENTO -######################\n") +
+                        ("Valor Por Hora: R$ " + getValorHora2() + " -######################\n") +
+                        ("Multa por Minuto: R$ " + getValorHoraMulta() + " -######################\n") +
+                        ("Desconto: R$ " + "-" + getValorDesconto() + " -######################\n") +
+                        ("Valor a pagar de Multa: R$ " + getValorMulta() + " -######################\n") +
+                        ("Total sem Multa: R$ " + (getTempoTotalHora().intValue() - getTempoMultaHora() ) * getValorHora2().intValue() + " -######################\n") +
+                        ("Valor Total: R$ " + getValorTotal()  + " -######################\n");
 
     }}

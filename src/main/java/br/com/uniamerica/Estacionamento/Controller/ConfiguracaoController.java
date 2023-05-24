@@ -34,7 +34,6 @@ public class ConfiguracaoController {
             return ResponseEntity.badRequest().body("Erro: " + e.getMessage());
         }
     }
-
     @PutMapping("/{id}")
     public ResponseEntity<?> atualizar(@PathVariable final @NotNull Long id, @RequestBody final Configuracao configuracao) {
         Optional<Configuracao> configuracaoCriado = configuracaoRepository.findById(id);
@@ -52,19 +51,3 @@ public class ConfiguracaoController {
     }
 
 }
- /*@PutMapping
-    public ResponseEntity<?> editarConfig(
-            @RequestParam("id") final Long id,
-            @RequestBody final  Configuracao configuracao
-    ) {
-        try{
-            this.configuracaoService.attConfiguracao(id,configuracao);
-            return ResponseEntity.ok("Configuracao atualizada");
-        }
-        catch (DataIntegrityViolationException e){
-            return ResponseEntity.internalServerError().body("Erro: " + e.getCause().getCause().getMessage());
-        }
-        catch (RuntimeException e){
-            return ResponseEntity.internalServerError().body("Erro: " + e.getMessage());
-        }
-    }*/

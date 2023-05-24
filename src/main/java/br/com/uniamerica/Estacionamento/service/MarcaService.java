@@ -1,14 +1,11 @@
 package br.com.uniamerica.Estacionamento.service;
 
-import br.com.uniamerica.Estacionamento.Entity.Condutor;
 import br.com.uniamerica.Estacionamento.Entity.Marca;
 import br.com.uniamerica.Estacionamento.Entity.Modelo;
 import br.com.uniamerica.Estacionamento.repository.MarcaRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,7 +26,6 @@ public class MarcaService {
         List<Marca> marca = marcaRepository.findAll();
         return marca;
     }
-
     public List<Marca> ativosMarca(){
         List<Marca> marca = marcaRepository.findByAtivoTrue();
         return marca;
@@ -41,12 +37,6 @@ public class MarcaService {
         }
         this.marcaRepository.save(marca);
     }
-
-
-
-
-
-
     public Marca atualizarMarca(Long id, Marca marcaAtualizada) {
         Marca marcaExistente = marcaRepository.findById(id).orElse(null);
         if (marcaExistente == null) {
@@ -56,11 +46,6 @@ public class MarcaService {
             return marcaRepository.save(marcaExistente);
         }
     }
-
-
-
-
-
     @Transactional(rollbackOn = Exception.class)
     public void deletar(final Marca marca){
         final Marca marcaBanco = this.marcaRepository.findById(marca.getId()).orElse(null);
@@ -77,27 +62,3 @@ public class MarcaService {
         }
     }
 }
-
-
-   /* @Transactional(rollbackOn = Exception.class)
-    public void editarMarca(@RequestParam("id")  Long id, @RequestBody Marca marca) {
-        final Marca marcabanco = this.marcaRepository.findById(id).orElse(null);
-        if (marcabanco == null || !marca.getId().equals(marcabanco.getId())) {
-            throw new RuntimeException("Não foi possivel identificar o registro informado");}
-        if (!marca.getNomeMarca().matches("[a-zA-Z]{2,50}")){
-            throw new RuntimeException("Nome inválido");}
-        if (marcaRepository.MarcaRepetida(marca.getNomeMarca())) {
-            throw new RuntimeException("Nome Repetido");}
-        marcaRepository.save(marca);
-    }*/
-
-/*  @Transactional(rollbackOn = Exception.class)
-    public void deletarMarca( @RequestParam("id") final Long id) {
-        Marca marca = this.marcaRepository.findById(id).orElse(null);
-        if(marcaRepository.marcaExistente(marca.getId())){
-            marca.setAtivo(false);
-            marcaRepository.save(marca);
-        }else {
-            marcaRepository.delete(marca);
-        }
-    }*/

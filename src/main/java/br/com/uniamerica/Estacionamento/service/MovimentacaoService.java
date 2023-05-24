@@ -101,16 +101,15 @@ public class MovimentacaoService {
             movimentacaoRepository.delete(movimentacao);
         }
     }
-
+//aq embaca as coisas
     @Transactional(rollbackOn = Exception.class)
     public String finalizarMovimentacao (@RequestParam("id") Long id, Movimentacao movimentacao){
-
+//Aqui eu crio o objetoconfig do tipo configuracao e atribuo as configuracoes do estacionamento pegando la no repositorio
         Configuracao objetoconfig = movimentacaoRepository.obterConfiguracao();
+//A partir daqui eu comeco a fazer as checagens
         if (id == null){
             throw new RuntimeException("ID nulo, verifique e tente novamente");
-        } /*else if (!movimentacao.getId().equals(id)) {
-            throw new RuntimeException("Os IDs nao estao conferindo, verifique e tente novamente");
-        }*/else if(!movimentacaoRepository.idExistente(id)) {
+        } else if(!movimentacaoRepository.idExistente(id)) {
             throw new RuntimeException("ID invalido, verifique e tente novamente");
         }else if(movimentacao.getSaida() == null){
             throw new RuntimeException("Data de saida nao informada, verifique e tente novamente");
@@ -131,79 +130,53 @@ public class MovimentacaoService {
         }else if (veiculoRepository.veiculoExistente(movimentacao.getVeiculo().getId()) && movimentacao.getSaida() == null){
             throw new RuntimeException("O veiculo ainda esta estacionado");
         }  else {
-//TEMPO DENTRO DO ESTACIONAMENTO
-
+//Comeco a fazer os calculos caso todas as checagens funcionem
+//qria calcula a multa mas ta foda
             int tempoMulta = calculaMulta(configuracaoRepository.getById(Long.valueOf(1)), movimentacao);
+//Aqui eu atribuo valor para o tempoMulta, chamando a funcao calculaMulta com o valor da multa como parametro
             int calculaTempo = calculaTempo(movimentacao);
+//Aqui eu atribuo valor para o calculaTempo, chamando a funcao calculaTempo com os valores da movimentacao como parametro
             int calculatempoCondutor = calculaTempo(movimentacao);
+//Aqui eu atribuo valor para o calculatempoCondutor, chamando a funcao calculaTempo com os valores da movimentacao como parametro
+//A diferenca eh que aqui eu to calculando o tempo para o codutor
 
-
-
+//Atribuindo os valores para as variaveis da movimentacao
             movimentacao.setTempoTotalHora(calculaTempo);
             movimentacao.setTempoTotalMinuto(calculaTempo * 60);
-            movimentacao.setTempoMultaHora(tempoMulta / 60);
-            movimentacao.setTempoMultaMinuto(tempoMulta);
-
-
+            movimentacao.setTempoMultaMinuto(tempoMulta / 60);
+            movimentacao.setTempoMultaHora(tempoMulta);
             movimentacao.setValorHoraMulta(objetoconfig.getValorMinutoMulta());
             movimentacao.setValorHora2(objetoconfig.getValorHora());
-
-
             movimentacao.setValorMulta(BigDecimal.valueOf((tempoMulta * objetoconfig.getValorMinutoMulta().intValue())));
 
-            //(calculaTempo * objConfiguracao.getValorHora().intValue())
-
-//    calculatempoCondutor =+ calculatempoCondutor;
-//    movimentacao.getCondutor().setTempototal(calculatempoCondutor);
-//
-//   objCondutor.setTempototal(calculatempoCondutor);
-
-
-//    BigDecimal valorHora = configuracaoRepository.getReferenceById(id).getValorHora();
-//    BigDecimal valorMinutoMulta = configuracaoRepository.getReferenceById(id).getValorMinutoMulta();
-
-//    //movimentacao.setValorTotal(BigDecimal.valueOf(movimentacao.getTempoTotalhora() * valorHora + movimentacao.getTempoMultaMinuto() * valorMinutoMulta));
-//    movimentacao.setValorTotal(BigDecimal.valueOf(movimentacao.getTempoTotalhora() + valorHora.intValue()).add(BigDecimal.valueOf(movimentacao.getTempoMultaMinuto() + valorMinutoMulta.intValue())));
-
-
-            //TEMPO DO CONDUTOR DO ESTACIONAMENTO
-
-            //CONVERTE UM VALOR LONG EM INT
+//Aqui eu atribuo o ID do meu condutor ao condutorExistente (em int)
             int condutorExistente = Math.toIntExact(movimentacao.getCondutor().getId());
-
-            //PESQUISA O NUMERO DO ID CONFORME FOI PASSADO ANTERIORMENTE
+//Aqui eu pego Condutor do repositório de condutores utilizando o ID do condutorExistente e atribuo para o condutorBanco
             Condutor condutorBanco = condutorRepository.getById((long) condutorExistente);
-
-            //CALCULO DO TEMPO ELE PUXA O TEMPO TOTAL DO BANCO + CALCULO DO RETORNO DE CALCULA TEMPO CONDUTOR
+//Aqui eu calculo o tempoNovo somando o tempo total do condutor com o valor da calculatempoCondutor, assim eu vou somando os tempos
             int tempoNovo = condutorBanco.getTempoTotal() + calculatempoCondutor;
-
-            //CALCULO DO TEMPO ELE PUXA O TEMPO TOTAL DO BANCO + CALCULO DO RETORNO DE CALCULA TEMPO CONDUTOR
+//Aqui eu calculo o tempoNovoPago somando o tempo já pago do condutorcom calculatempoCondutor, assim eu consigo o tempopago
             int tempoNovoPago = condutorBanco.getTempoPago() + calculatempoCondutor;
-
+//Aqui apenas atribuo valores para as variaveis mostrar pro usuario final depois
             condutorBanco.setTempoTotal(tempoNovo);
             condutorBanco.setTempoPago(tempoNovoPago);
             movimentacao.getCondutor().setTempoTotal(condutorBanco.getTempoTotal());
-
-
-            //TEMPO DE DESCONTO
-
+//Calculando o tempo de desconto
+//Aqui eu reseto o meu tempo de desconto, quando ele passa de 5 eu transformo ele em 0 novamente
             if(condutorBanco.getTempoDesconto() >= 5) {
                 condutorBanco.setTempoDesconto(0);
                 movimentacao.getCondutor().setTempoDesconto(condutorBanco.getTempoDesconto());
             }
-
+//Aqui eu faco a verificaao se meu TempoPago é maior que 50 ou nao
             if (condutorBanco.getTempoPago() > 50) {
-                //CALCULA O VALOR DO DESCONTO
+//Caso seja, eu faco o calculo para dar o desconto ao usuario, onde a cada 50 horas o usuario ganharia 5
                 condutorBanco.setTempoDesconto((condutorBanco.getTempoPago() / 50 * 5) + condutorBanco.getTempoDesconto());
-
-                //CALCULA O TANTO QUE SOBROU DO CONDUTOR PARA DEIXAR ARMAZENADO PARA AS PROXIMAS 50 HORAS PARA DESCONTO
+//Aqui seria o calculo para caso o usuario nao use tudo e deixe para a proxima (perguntar q negocio bizarro acontece qnd eu digito t0d0 o seu desconto)
                 condutorBanco.setTempoPago(condutorBanco.getTempoPago() % 50);
             }
-
-
+//Aqui eu obtenho o objeto Veiculo do repositório e atribuo a variável veiculoBanco
             Veiculo veiculoBanco = veiculoRepository.getById(id);
-
-
+//Setando mais variaveis para o usuario
             movimentacao.setValorDesconto(BigDecimal.valueOf(condutorBanco.getTempoDesconto() * objetoconfig.getValorHora().intValue()));
             movimentacao.getCondutor().setTempoDesconto(condutorBanco.getTempoDesconto());
             movimentacao.getCondutor().setTempoPago(condutorBanco.getTempoPago());
@@ -214,141 +187,51 @@ public class MovimentacaoService {
             movimentacao.getVeiculo().setAno(veiculoBanco.getAno());
             movimentacao.getVeiculo().setTipo(veiculoBanco.getTipo());
             movimentacao.getVeiculo().setCor(veiculoBanco.getCor());
-
-
             movimentacao.setValorTotal(BigDecimal.valueOf(( calculaTempo - (tempoMulta/60)) * objetoconfig.getValorHora().intValue() + (tempoMulta * objetoconfig.getValorMinutoMulta().intValue()) - (movimentacao.getTempoDesconto() * objetoconfig.getValorHora().intValue())));
-
-
-
-
             condutorRepository.save(condutorBanco);
-
             movimentacaoRepository.save(movimentacao);
-
-
         }
-
+//Aqui eu retorno para a minha toString feita na entity movimentacao
         return movimentacao.toString();
     }
-
-
-
-
-
-
+//Inicion do calculo da multa
     private int calculaMulta(final Configuracao configuracao, final Movimentacao movimentacao){
-
-
+//Salvo em variaveis os valores de entrada, saida, inicio e fim de expediente
         LocalDateTime entrada = movimentacao.getEntrada();
         LocalDateTime saida = movimentacao.getSaida();
         LocalTime inicioExpediente = configuracao.getInicioExpediente();
         LocalTime fimExpediente = configuracao.getFimExpediente();
+//inicialio as variaveis para calculo
         int multa = 0;
         int AnoEntrada = entrada.getYear();
         int saidaAno = saida.getYear();
         int totalDias = 0;
-
+//Calculo o total de dias
         if(AnoEntrada != saidaAno){
             totalDias += saidaAno - AnoEntrada;
         } else{
             totalDias += saida.getDayOfYear() - entrada.getDayOfYear();
         }
-        //if (entrada.toLocalTime().isBefore(inicioExpediente)){
+//Calculo a multa sendo a duracao entre a entrada e a saida em minnutos e retorno ela
         if (  inicioExpediente.isAfter(entrada.toLocalTime())){
-            //multa += ((int) Duration.between(inicioExpediente,saida.toLocalTime()).getSeconds()/60);
             multa += ((int) Duration.between(entrada.toLocalTime(), inicioExpediente).toMinutes());
         }
-//        if(saida.toLocalTime().isBefore(fimExpediente))
         if (fimExpediente.isBefore(saida.toLocalTime()))
         {
-            //multa += ((int) Duration.between(fimExpediente,saida.toLocalTime()).getSeconds()) / 60 ;
             multa += ((int) Duration.between(fimExpediente, saida.toLocalTime()).toMinutes());
-
         }
         if (totalDias > 0){
-            int diferenca = ((int) Duration.between(inicioExpediente, fimExpediente).toMinutes());//getSeconds()/60);
+            int diferenca = ((int) Duration.between(inicioExpediente, fimExpediente).toMinutes());
             multa +=   (totalDias * 24 * 60 ) - (diferenca);
-            // multa =   (totalDias * 24 * 60 ); //- (diferenca * totalDias);
-            //multa =    (diferenca * totalDias * 60);
-            //multa = totalDias;
-            //multa = diferenca;
         }
-
-
-
         return multa;
     }
-
     public int calculaTempo (final Movimentacao movimentacao){
+//Aqui apenas calculo o tempo total sendo ele a diferenca entre entrada e saida, dividindo por 3600 para conseguir em horas
         int tempo=0;
         LocalDateTime tempoEntrada = movimentacao.getEntrada();
         LocalDateTime tempoSaida = movimentacao.getSaida();
-
         tempo =  (int)  Duration.between(tempoEntrada,tempoSaida).getSeconds()/3600;
-
-
         return tempo;
-
     }
-
-
-    public int calculaTempoComDesconto(Movimentacao movimentacao, Configuracao configuracao){
-
-        LocalDateTime entrada = movimentacao.getEntrada();
-        LocalDateTime saida = movimentacao.getSaida();
-        LocalTime inicioExpediente = configuracao.getInicioExpediente();
-        LocalTime fimExpediente = configuracao.getFimExpediente();
-        int tempoDesconto = 0;
-        int AnoEntrada = entrada.getYear();
-        int saidaAno = saida.getYear();
-        int totalDias = 0;
-
-        if(AnoEntrada != saidaAno){
-            totalDias += saidaAno - AnoEntrada;
-        } else{
-            totalDias += saida.getDayOfYear() - entrada.getDayOfYear();
-        }
-        if (  inicioExpediente.isAfter(entrada.toLocalTime())){
-            tempoDesconto += ((int) Duration.between(entrada.toLocalTime(), inicioExpediente).toMinutes());
-        }
-        if (fimExpediente.isBefore(saida.toLocalTime()))
-        {
-            tempoDesconto += ((int) Duration.between(fimExpediente, saida.toLocalTime()).toMinutes());
-
-        }
-        if (totalDias > 0){
-            int diferenca = ((int) Duration.between(inicioExpediente, fimExpediente).toMinutes());//getSeconds()/60);
-            tempoDesconto +=   (totalDias * 24 * 60 ) - (diferenca + movimentacao.getCondutor().getTempoDesconto());
-
-        }
-
-
-        return tempoDesconto;
-    }
-
 }
-
-
-  /*@Transactional
-    public void attMovimentacao(final Long id, Movimentacao movimentacao){
-        final Movimentacao movimentacaoBanco = this.movimentacaoRepository.findById(id).orElse(null);
-        if(movimentacaoBanco==null || !movimentacaoBanco.getId().equals(movimentacao.getId())){
-            throw new RuntimeException("Registro nao encontrado, verifique e tente novamente");
-        }
-        if(movimentacao.getVeiculo().getPlaca()==null || movimentacao.getVeiculo().getPlaca().isEmpty()){
-            throw new RuntimeException("Verifique a placa e tente novamente");
-        }
-        if("".equals(movimentacao.getVeiculo().getAno())){
-            throw new RuntimeException("Verifique o ano do seu veiculo e tente novamente");
-        }
-        if(movimentacao.getVeiculo().getMarca().getNomeMarca()==null || movimentacao.getVeiculo().getMarca().getNomeMarca().isEmpty()){
-            throw new RuntimeException("Verifique o nome da marca do seu veiculo e tente novamente");
-        }
-        if("".equals(movimentacao.getCondutor().getNomeCondutor())){
-            throw new RuntimeException("Verifique o nome do Condutor e tente novamente");
-        }
-        if("".equals(movimentacao.getCondutor().getCpf())){
-            throw new RuntimeException("Vefique o CPF do condutor e tente novamente");
-        }
-        this.movimentacaoRepository.save(movimentacao);
-    }*/

@@ -1,7 +1,6 @@
 package br.com.uniamerica.Estacionamento.Controller;
 import br.com.uniamerica.Estacionamento.Entity.Veiculo;
 import br.com.uniamerica.Estacionamento.repository.VeiculoRepository;
-import br.com.uniamerica.Estacionamento.service.MovimentacaoService;
 import br.com.uniamerica.Estacionamento.service.VeiculoService;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +44,6 @@ public class VeiculoController {
             return ResponseEntity.badRequest().body("Erro: " + e.getMessage());
         }
     }
-
     @PutMapping("/{id}")
     public ResponseEntity<?> atualizar(@PathVariable final @NotNull Long id, @RequestBody final Veiculo veiculo) {
         Optional<Veiculo> veiculoExiste = veiculoRepository.findById(id);
@@ -59,8 +57,6 @@ public class VeiculoController {
             return ResponseEntity.badRequest().body("Id não foi encontrado ou não corresponde ao veículo informado");
         }
     }
-
-
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletar(@PathVariable final Long id) {
         Optional<Veiculo> optionalVeiculo = veiculoRepository.findById(id);
@@ -81,42 +77,3 @@ public class VeiculoController {
         }
     }
 }
-
-
-
-/*
-
-    @PostMapping
-    public ResponseEntity<?> cadastrar(@RequestBody Veiculo veiculo) {
-        this.veiculoRepository.save(veiculo);
-        return ResponseEntity.ok().body("Registro cadastrado com sucesso");
-    }*/
-
-
-   /* @PutMapping
-    public ResponseEntity<?> editarVeiculo(
-            @RequestParam("id") final Long id,
-            @RequestBody final  Veiculo veiculo
-    ) {
-        try{
-            this.veiculoService.atualizaVeiculo(id,veiculo);
-            return ResponseEntity.ok("Veiculo atualizado");
-        }
-        catch (DataIntegrityViolationException e){
-            return ResponseEntity.internalServerError().body("Erro: " + e.getCause().getCause().getMessage());
-        }
-        catch (RuntimeException e){
-            return ResponseEntity.internalServerError().body("Erro: " + e.getMessage());
-        }
-    }*/
-
-
-   /* @DeleteMapping
-    public ResponseEntity<?> delete( @RequestParam("id") final Long id){
-        try {
-            this.veiculoService.deleteVeiculo(id);
-            return ResponseEntity.ok("Veiculo desativado");
-        } catch (DataIntegrityViolationException e){
-            return ResponseEntity.internalServerError().body("Error " + e.getCause().getCause().getMessage());
-        }
-    }*/

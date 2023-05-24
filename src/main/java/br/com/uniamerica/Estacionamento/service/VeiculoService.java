@@ -60,7 +60,6 @@ public class VeiculoService {
         }else {
             veiculoRepository.save(veiculo);
         }
-
     }
     public Veiculo atualizarVeiculo(Long id, Veiculo veiculoAtualizada) {
         Veiculo veiculoExistente = veiculoRepository.findById(1L).orElse(null);
@@ -88,64 +87,3 @@ public class VeiculoService {
         }
     }
 }
-/*@Transactional
-    public Veiculo cadastrarVeiculo(Veiculo veiculo){
-        Assim tambem funcionaria
-        Assert.hasText(veiculo.getPlaca(), "Insira uma placa para o veiculo");
-        Assert.notNull(veiculo.getMarca(), "Insira uma cor para o veiculo");
-        Assert.notNull(veiculo.getAno(), "Insira um ano para o veiculo");
-
-        return this.veiculoRepository.save(veiculo);
-
-    }*/
-
-
-    /*@Transactional
-    public void atualizaVeiculo(final Long id, Veiculo veiculo){
-        final Veiculo veiculoBanco = this.veiculoRepository.findById(id).orElse(null);
-        if(veiculoBanco==null || !veiculoBanco.getId().equals(veiculo.getId())){
-            throw new RuntimeException("Registro nao encontrado, verifique e tente novamente");
-        }
-        if("".equals(veiculo.getPlaca())){
-            throw new RuntimeException("Verifique a placa do seu veiculo e tente novamente");
-        }
-        if("".equals(veiculo.getModelo().getNomeModelo())){
-            throw new RuntimeException("Verifique o  modelo do seu veiculo e tente novamente");
-        }
-        if("".equals(veiculo.getModelo().getMarca().getNomeMarca())){
-            throw new RuntimeException("Verifique a marca do seu veiculo e tente novamente");
-        }
-        if("".equals(veiculo.getAno())){
-            throw new RuntimeException("Verifique o ano do seu veiculo e tente novamente");
-        }
-        this.veiculoRepository.save(veiculo);
-    }*/
-
-
-    /*@Transactional(rollbackOn = Exception.class)
-    public void deleteVeiculo( @RequestParam("id") final Long id) {
-        Veiculo veiculo = this.veiculoRepository.findById(id).orElse(null);
-        if(veiculoRepository.veiculoExistente(veiculo.getId())){
-            veiculo.setAtivo(false);
-            veiculoRepository.save(veiculo);
-        }else {
-            veiculoRepository.delete(veiculo);
-        }
-    }*/
-
-/*@Transactional
-    public void cadastraVeiculo(Veiculo veiculo){
-        if("".equals(veiculo.getPlaca())){
-            throw new RuntimeException("Verifique a placa do seu veiculo e tente novamente)");
-        }
-        if("".equals(veiculo.getModelo().getNomeModelo())){
-            throw new RuntimeException("Verifique o  modelo do seu veiculo e tente novamente");
-        }
-        if("".equals(veiculo.getModelo().getMarca().getNomeMarca())){
-            throw new RuntimeException("Verifique a marca do seu veiculo e tente novamente");
-        }
-        if("".equals(veiculo.getAno())){
-            throw new RuntimeException("Verifique o ano do seu veiculo e tente novamente");
-        }
-        this.veiculoRepository.save(veiculo);
-    }*/

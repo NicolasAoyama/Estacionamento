@@ -7,7 +7,6 @@ import br.com.uniamerica.Estacionamento.repository.VeiculoRepository;
 import br.com.uniamerica.Estacionamento.service.ModeloService;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -88,29 +87,3 @@ public class ModeloController {
         }
     }
 }
-
-/*@PutMapping
-    public ResponseEntity<?> editarModelo(
-            @RequestParam("id") final Long id,
-            @RequestBody final  Modelo modelo
-    ) {
-        try{
-            this.modeloService.attModelo(id,modelo);
-            return ResponseEntity.ok("Modelo atualizado");
-        }
-        catch (DataIntegrityViolationException e){
-            return ResponseEntity.internalServerError().body("Erro: " + e.getCause().getCause().getMessage());
-        }
-        catch (RuntimeException e){
-            return ResponseEntity.internalServerError().body("Erro: " + e.getMessage());
-        }
-    }*/
-/*@DeleteMapping
-    public ResponseEntity<?> delete( @RequestParam("id") final Long id){
-        try {
-            this.modeloService.delete(id);
-            return ResponseEntity.ok("Modelo desativado");
-        } catch (DataIntegrityViolationException e){
-            return ResponseEntity.internalServerError().body("Erro: " + e.getCause().getCause().getMessage());
-        }
-    }*/
