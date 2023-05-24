@@ -3,19 +3,17 @@ package br.com.uniamerica.Estacionamento.Entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.envers.AuditTable;
-import org.hibernate.envers.Audited;
 
 @Entity
 @Table(name = "modelos", schema="public")
 public class Modelo extends AbstractEntity{
     @Getter
     @Setter
-    @Column(name = "nome_modelo")
+    @Column(name = "nome")
     private String nomeModelo;
     @Getter @Setter
     @ManyToOne
-    @JoinColumn(name = "modelo_marca",nullable = false)
+    @JoinColumn(name = "marca",nullable = false)
     private Marca marca;
 
 

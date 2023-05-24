@@ -22,7 +22,7 @@ public class ModeloService {
 
 
     public Optional<Modelo> procurarModelo(Long id){
-        if (!modeloRepository.idExistente(id) ){
+        if (!modeloRepository.ProcuraId(id) ){
             throw new RuntimeException("Esse ID nao esta no banco de dados, verifique e tente novamente");
         }else {
             Optional<Modelo> modelo = this.modeloRepository.findById(id);

@@ -11,9 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +29,8 @@ public class MovimentacaoService {
     private VeiculoRepository veiculoRepository;
     @Autowired
     private ModeloRepository modeloRepository;
+    @Autowired
+    private  ConfiguracaoService configuracaoService;
     public Optional<Movimentacao> procurarMovimentacao(Long id){
         if (!movimentacaoRepository.idExistente(id) ){
             throw new RuntimeException("Esse ID nao esta no banco de dados, verifique e tente novamente");
@@ -48,48 +48,47 @@ public class MovimentacaoService {
         List<Movimentacao> movimentacao = movimentacaoRepository.findByAtivoTrue();
         return movimentacao;
     }
-    @Transactional
-    public void cadastraMovimentacao(Movimentacao movimentacao){
-        if(movimentacao.getVeiculo().getPlaca()==null || movimentacao.getVeiculo().getPlaca().isEmpty()){
-            throw new RuntimeException("Verifique a placa e tente novamente");
+
+    @Transactional(rollbackOn = Exception.class)
+    public void cadastrar(final Movimentacao movimentacao){
+
+        if (movimentacao.getCondutor() == null){
+            throw new RuntimeException("Condutor Nulo");
+        }else if(!veiculoRepository.ProcuraId(movimentacao.getVeiculo().getId())){
+            throw new RuntimeException("Veiculo Não Existe No Banco de Dados");
+        }else if (veiculoRepository.veiculoExistente(movimentacao.getVeiculo().getId()) && movimentacao.getSaida() == null){
+            throw new RuntimeException("Veiculo já está estacionado.");
+        } else if (!veiculoRepository.getById(movimentacao.getVeiculo().getId()).isAtivo()) {
+            throw new RuntimeException("Veiculo inativo");
+        }else if(!condutorRepository.idExistente(movimentacao.getCondutor().getId())){
+            throw new RuntimeException("Condutor Não Existe No Banco de Dados");
+        } else if (!condutorRepository.getById(movimentacao.getCondutor().getId()).isAtivo()) {
+            throw new RuntimeException("Condutor inativo.");
+        } else if (movimentacao.getEntrada() == null) {
+            throw new RuntimeException("Data de Entrada Nula.");
+        } else {
+            movimentacaoRepository.save(movimentacao);
         }
-        if("".equals(movimentacao.getVeiculo().getAno())){
-            throw new RuntimeException("Verifique o ano do seu veiculo e tente novamente");
-        }
-        if(movimentacao.getVeiculo().getMarca().getNomeMarca()==null || movimentacao.getVeiculo().getMarca().getNomeMarca().isEmpty()){
-            throw new RuntimeException("Verifique o nome da marca do seu veiculo e tente novamente");
-        }
-        if("".equals(movimentacao.getCondutor().getNomeCondutor())){
-            throw new RuntimeException("Verifique o nome do Condutor e tente novamente");
-        }
-        if("".equals(movimentacao.getCondutor().getCpf())){
-            throw new RuntimeException("Vefique o CPF do condutor e tente novamente");
-        }
-        this.movimentacaoRepository.save(movimentacao);
     }
 
-    @Transactional
-    public void attMovimentacao(final Long id, Movimentacao movimentacao){
-        final Movimentacao movimentacaoBanco = this.movimentacaoRepository.findById(id).orElse(null);
-        if(movimentacaoBanco==null || !movimentacaoBanco.getId().equals(movimentacao.getId())){
-            throw new RuntimeException("Registro nao encontrado, verifique e tente novamente");
+    public Movimentacao atualizarMovimentacao(Long id, Movimentacao movimentacaoAtualizado) {
+        Movimentacao movimentacaoExistente = movimentacaoRepository.findById(id).orElse(null);
+        if (movimentacaoExistente == null) {
+            return null;
+        } else {
+            movimentacaoExistente.setCondutor(movimentacaoAtualizado.getCondutor());
+            movimentacaoExistente.setEntrada(movimentacaoAtualizado.getEntrada());
+            movimentacaoExistente.setSaida(movimentacaoAtualizado.getSaida());
+            movimentacaoExistente.setVeiculo(movimentacaoAtualizado.getVeiculo());
+            movimentacaoExistente.setTempoDesconto(movimentacaoAtualizado.getTempoDesconto());
+            movimentacaoExistente.setTempoMultaHora(movimentacaoAtualizado.getTempoMultaHora());
+            movimentacaoExistente.setValorDesconto(movimentacaoAtualizado.getValorDesconto());
+            movimentacaoExistente.setValorHora2(movimentacaoAtualizado.getValorHora2());
+            movimentacaoExistente.setValorTotal(movimentacaoAtualizado.getValorTotal());
+            movimentacaoExistente.setValorMulta(movimentacaoAtualizado.getValorMulta());
+            movimentacaoExistente.setValorHoraMulta(movimentacaoAtualizado.getValorHoraMulta());
+            return movimentacaoRepository.save(movimentacaoExistente);
         }
-        if(movimentacao.getVeiculo().getPlaca()==null || movimentacao.getVeiculo().getPlaca().isEmpty()){
-            throw new RuntimeException("Verifique a placa e tente novamente");
-        }
-        if("".equals(movimentacao.getVeiculo().getAno())){
-            throw new RuntimeException("Verifique o ano do seu veiculo e tente novamente");
-        }
-        if(movimentacao.getVeiculo().getMarca().getNomeMarca()==null || movimentacao.getVeiculo().getMarca().getNomeMarca().isEmpty()){
-            throw new RuntimeException("Verifique o nome da marca do seu veiculo e tente novamente");
-        }
-        if("".equals(movimentacao.getCondutor().getNomeCondutor())){
-            throw new RuntimeException("Verifique o nome do Condutor e tente novamente");
-        }
-        if("".equals(movimentacao.getCondutor().getCpf())){
-            throw new RuntimeException("Vefique o CPF do condutor e tente novamente");
-        }
-        this.movimentacaoRepository.save(movimentacao);
     }
 
     @Transactional(rollbackOn = Exception.class)
@@ -103,17 +102,15 @@ public class MovimentacaoService {
         }
     }
 
-
-
     @Transactional(rollbackOn = Exception.class)
     public String finalizarMovimentacao (@RequestParam("id") Long id, Movimentacao movimentacao){
 
         Configuracao objetoconfig = movimentacaoRepository.obterConfiguracao();
         if (id == null){
             throw new RuntimeException("ID nulo, verifique e tente novamente");
-        } else if (!movimentacao.getId().equals(id)) {
+        } /*else if (!movimentacao.getId().equals(id)) {
             throw new RuntimeException("Os IDs nao estao conferindo, verifique e tente novamente");
-        }else if(!movimentacaoRepository.idExistente(id)) {
+        }*/else if(!movimentacaoRepository.idExistente(id)) {
             throw new RuntimeException("ID invalido, verifique e tente novamente");
         }else if(movimentacao.getSaida() == null){
             throw new RuntimeException("Data de saida nao informada, verifique e tente novamente");
@@ -127,7 +124,7 @@ public class MovimentacaoService {
             throw new RuntimeException("Condutor invalido, verifique e tente novamente");
         } else if (movimentacao.getVeiculo() == null) {
             throw new RuntimeException("Veiculo Nulo, verifique e tente novamente");
-        }else if (!veiculoRepository.idExistente(movimentacao.getVeiculo().getId())) {
+        }else if (!veiculoRepository.ProcuraId(movimentacao.getVeiculo().getId())) {
             throw new RuntimeException("Veiculo invalido, verifique e tente novamente");
         }else if (!veiculoRepository.getById(movimentacao.getVeiculo().getId()).isAtivo()) {
             throw new RuntimeException("Veiculo invalido, verifique e tente novamente");
@@ -149,7 +146,7 @@ public class MovimentacaoService {
 
 
             movimentacao.setValorHoraMulta(objetoconfig.getValorMinutoMulta());
-            movimentacao.setValorHora(objetoconfig.getValorHora());
+            movimentacao.setValorHora2(objetoconfig.getValorHora());
 
 
             movimentacao.setValorMulta(BigDecimal.valueOf((tempoMulta * objetoconfig.getValorMinutoMulta().intValue())));
@@ -330,3 +327,28 @@ public class MovimentacaoService {
     }
 
 }
+
+
+  /*@Transactional
+    public void attMovimentacao(final Long id, Movimentacao movimentacao){
+        final Movimentacao movimentacaoBanco = this.movimentacaoRepository.findById(id).orElse(null);
+        if(movimentacaoBanco==null || !movimentacaoBanco.getId().equals(movimentacao.getId())){
+            throw new RuntimeException("Registro nao encontrado, verifique e tente novamente");
+        }
+        if(movimentacao.getVeiculo().getPlaca()==null || movimentacao.getVeiculo().getPlaca().isEmpty()){
+            throw new RuntimeException("Verifique a placa e tente novamente");
+        }
+        if("".equals(movimentacao.getVeiculo().getAno())){
+            throw new RuntimeException("Verifique o ano do seu veiculo e tente novamente");
+        }
+        if(movimentacao.getVeiculo().getMarca().getNomeMarca()==null || movimentacao.getVeiculo().getMarca().getNomeMarca().isEmpty()){
+            throw new RuntimeException("Verifique o nome da marca do seu veiculo e tente novamente");
+        }
+        if("".equals(movimentacao.getCondutor().getNomeCondutor())){
+            throw new RuntimeException("Verifique o nome do Condutor e tente novamente");
+        }
+        if("".equals(movimentacao.getCondutor().getCpf())){
+            throw new RuntimeException("Vefique o CPF do condutor e tente novamente");
+        }
+        this.movimentacaoRepository.save(movimentacao);
+    }*/

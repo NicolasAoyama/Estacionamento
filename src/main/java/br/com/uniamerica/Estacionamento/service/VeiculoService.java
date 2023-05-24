@@ -1,16 +1,12 @@
 package br.com.uniamerica.Estacionamento.service;
 
-import br.com.uniamerica.Estacionamento.Entity.Condutor;
-import br.com.uniamerica.Estacionamento.Entity.Modelo;
-import br.com.uniamerica.Estacionamento.Entity.Tipo;
 import br.com.uniamerica.Estacionamento.Entity.Veiculo;
 import br.com.uniamerica.Estacionamento.repository.ModeloRepository;
 import br.com.uniamerica.Estacionamento.repository.VeiculoRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.RequestParam;
+
 
 import java.time.LocalDate;
 import java.util.List;
@@ -21,12 +17,10 @@ public class VeiculoService {
     @Autowired
     private VeiculoRepository veiculoRepository;
     @Autowired
-    private ModeloService modeloService;
-    @Autowired
     private ModeloRepository modeloRepository;
 
     public Optional<Veiculo> procurarVeiculo(Long id){
-        if (!veiculoRepository.idExistente(id) ){
+        if (!veiculoRepository.ProcuraId(id) ){
             throw new RuntimeException("Esse ID nao esta no banco de dados, verifique e tente novamente");
         }else {
             Optional<Veiculo> veiculo = this.veiculoRepository.findById(id);
@@ -42,27 +36,8 @@ public class VeiculoService {
         List<Veiculo> veiculo = veiculoRepository.findByAtivoTrue();
         return veiculo;
     }
-    /*@Transactional
-    public void cadastraVeiculo(Veiculo veiculo){
-        if("".equals(veiculo.getPlaca())){
-            throw new RuntimeException("Verifique a placa do seu veiculo e tente novamente)");
-        }
-        if("".equals(veiculo.getModelo().getNomeModelo())){
-            throw new RuntimeException("Verifique o  modelo do seu veiculo e tente novamente");
-        }
-        if("".equals(veiculo.getModelo().getMarca().getNomeMarca())){
-            throw new RuntimeException("Verifique a marca do seu veiculo e tente novamente");
-        }
-        if("".equals(veiculo.getAno())){
-            throw new RuntimeException("Verifique o ano do seu veiculo e tente novamente");
-        }
-        this.veiculoRepository.save(veiculo);
-    }*/
     @Transactional(rollbackOn = Exception.class)
     public void cadastrar(final Veiculo veiculo){
-
-
-
         if (veiculo.getPlaca() == null){
             throw new RuntimeException("Placa Nula");
         }else if (!veiculo.getPlaca().matches("[a-zA-Z]{3}-[0-9]{4}|[a-zA-Z]{3}[0-9]{4}" +
@@ -72,7 +47,7 @@ public class VeiculoService {
             throw new RuntimeException("Placa ja existe no banco");
         }else if (veiculo.getModelo() == null){
             throw new RuntimeException("modelo inválido");
-        }else if (!modeloRepository.idExistente(veiculo.getModelo().getId())){
+        }else if (!modeloRepository.ProcuraId(veiculo.getModelo().getId())){
             throw new RuntimeException("Modelo Nao existe no Banco de Dados");
         }else if (veiculo.getCor() == null) {
             throw new RuntimeException("Cor inválido");
@@ -156,4 +131,21 @@ public class VeiculoService {
         }else {
             veiculoRepository.delete(veiculo);
         }
+    }*/
+
+/*@Transactional
+    public void cadastraVeiculo(Veiculo veiculo){
+        if("".equals(veiculo.getPlaca())){
+            throw new RuntimeException("Verifique a placa do seu veiculo e tente novamente)");
+        }
+        if("".equals(veiculo.getModelo().getNomeModelo())){
+            throw new RuntimeException("Verifique o  modelo do seu veiculo e tente novamente");
+        }
+        if("".equals(veiculo.getModelo().getMarca().getNomeMarca())){
+            throw new RuntimeException("Verifique a marca do seu veiculo e tente novamente");
+        }
+        if("".equals(veiculo.getAno())){
+            throw new RuntimeException("Verifique o ano do seu veiculo e tente novamente");
+        }
+        this.veiculoRepository.save(veiculo);
     }*/

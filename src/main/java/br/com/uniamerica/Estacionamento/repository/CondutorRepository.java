@@ -14,8 +14,6 @@ public interface CondutorRepository extends JpaRepository<Condutor, Long> {
     List<Condutor> findByAtivoTrue();
     @Query(value = "select exists (select * from condutores where nome = :nome)", nativeQuery = true)
     boolean nomeExistente(@Param("nome") final String nome);
-    @Query(value = "select exists (select * from movimentacoes where condutor = :id)", nativeQuery = true)
-    boolean condutorExistente(@Param("id") final Long id);
     @Query(value = "select exists (select * from condutores where id = :id)", nativeQuery = true)
     boolean idExistente(@Param("id") final Long id);
 
@@ -24,12 +22,6 @@ public interface CondutorRepository extends JpaRepository<Condutor, Long> {
 
     @Query(value = "select exists (select * from condutores where cpf = :cpf)", nativeQuery = true)
     boolean cpfExistente(@Param("cpf") final String cpf);
-
-    @Query(value = "select condutor.id from Condutor condutor where condutor.cpf = :cpf")
-    Long cpfExistentenoCondutor(@Param("cpf") String cpf);
-
-    @Query (value = "select condutor.id from Condutor condutor where condutor.telefone = :telefone")
-    Long telefoneExistenteCondutor (@Param("telefone") String telefone);
 
 }
 

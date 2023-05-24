@@ -1,17 +1,22 @@
 package br.com.uniamerica.Estacionamento.Controller;
 
 import br.com.uniamerica.Estacionamento.Entity.Movimentacao;
+import br.com.uniamerica.Estacionamento.repository.MovimentacaoRepository;
 import br.com.uniamerica.Estacionamento.service.MovimentacaoService;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping (value = "/api/movimentacao")
 public class MovimentacaoController {
     @Autowired
     private MovimentacaoService movimentacaoService;
+    @Autowired
+    private MovimentacaoRepository movimentacaoRepository;
 
 
     @GetMapping
@@ -33,38 +38,53 @@ public class MovimentacaoController {
         return ResponseEntity.ok(movimentacaoService.ativosMovimentacao());
     }
 
+
     @PostMapping
-    public ResponseEntity<?> cadastrarMovimentacao(@RequestBody final Movimentacao movimentacao) {
+    public ResponseEntity<?> cadastrar(@RequestBody final Movimentacao movimentacao) {
         try {
-            this.movimentacaoService.cadastraMovimentacao(movimentacao);
-            return ResponseEntity.ok("Movimentacao cadastrada");
+            this.movimentacaoService.cadastrar(movimentacao);
+            return ResponseEntity.ok("Registro Cadastrado com sucesso");
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Erro: " + e.getMessage());
+            return ResponseEntity.badRequest().body("ERRO AQUI TA DANDO ERRO" + e.getMessage());
+        }
+
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> atualizar(@PathVariable final @NotNull Long id, @RequestBody final Movimentacao movimentacao) {
+        Optional<Movimentacao> movimentacaoExiste = movimentacaoRepository.findById(id);
+
+        if (movimentacaoExiste.isPresent()) {
+            Movimentacao movimentacaoAtualizado = movimentacaoExiste.get();
+
+            movimentacaoService.atualizarMovimentacao(movimentacaoAtualizado.getId(), movimentacao);
+
+            return ResponseEntity.ok().body("Registro de Movimetnacao atulizado com sucesso");
+        } else {
+            return ResponseEntity.badRequest().body("ID não encontrado");
         }
     }
-    @PutMapping
-    public ResponseEntity<?> editarMovimentacao(
-            @RequestParam("id") final Long id,
-            @RequestBody final Movimentacao movimentacao
-    ) {
-        try {
-            this.movimentacaoService.attMovimentacao(id, movimentacao);
-            return ResponseEntity.ok("Movimentacao atualizada com sucesso");
-        } catch (DataIntegrityViolationException e) {
-            return ResponseEntity.internalServerError().body("Erro: " + e.getCause().getCause().getMessage());
-        } catch (RuntimeException e) {
-            return ResponseEntity.internalServerError().body("Erro: " + e.getMessage());
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletar(@PathVariable final Long id) {
+        Optional<Movimentacao> optionalMovimentacao = movimentacaoRepository.findById(id);
+
+        if (optionalMovimentacao.isPresent()) {
+            Movimentacao movimentacao = optionalMovimentacao.get();
+
+            if (movimentacao.isAtivo()) {
+                movimentacaoRepository.delete(movimentacao);
+                return ResponseEntity.ok().body("O Registro de Movimentacao Foi Deletado com sucesso");
+            } else {
+                movimentacao.setAtivo(false);
+                movimentacaoRepository.save(movimentacao);
+                return ResponseEntity.ok().body("A movimentacao foi desativada com sucesso");
+            }
+        } else {
+            return ResponseEntity.notFound().build();
         }
     }
-    @DeleteMapping
-    public ResponseEntity<?> delete(@RequestParam("id") final Long id) {
-        try {
-            this.movimentacaoService.deleteMovimentacao(id);
-            return ResponseEntity.ok("Movimentacao desativada");
-        } catch (DataIntegrityViolationException e) {
-            return ResponseEntity.internalServerError().body("Erro: " + e.getCause().getCause().getMessage());
-        }
-    }/*
+
     @PutMapping(value = "/finalizar")
     public ResponseEntity<?> finalizar(@RequestParam("id")final Long id,@RequestBody final  Movimentacao movimentacao){
         try{
@@ -73,5 +93,9 @@ public class MovimentacaoController {
         catch (Exception e){
             return ResponseEntity.badRequest().body("Error " + e.getMessage());
         }
-    }*/
+    }
+
+
+
+
 }

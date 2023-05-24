@@ -5,7 +5,6 @@ import br.com.uniamerica.Estacionamento.service.MovimentacaoService;
 import br.com.uniamerica.Estacionamento.service.VeiculoService;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +15,6 @@ import java.util.Optional;
 public class VeiculoController {
     @Autowired
     private VeiculoService veiculoService;
-    @Autowired
-    private MovimentacaoService movimentacaoService;
     @Autowired
     private VeiculoRepository veiculoRepository;
 

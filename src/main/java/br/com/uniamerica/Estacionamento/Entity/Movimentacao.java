@@ -3,59 +3,56 @@ package br.com.uniamerica.Estacionamento.Entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.envers.AuditTable;
-import org.hibernate.envers.Audited;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Entity
 @Table(name = "movimentacoes", schema="public")
 public class Movimentacao extends AbstractEntity{
     @Getter @Setter
     @ManyToOne
-    @JoinColumn(name = "movimentacao_veiculo", nullable = false)
+    @JoinColumn(name = "veiculo", nullable = false)
     private Veiculo veiculo;
     @Getter @Setter
     @ManyToOne
-    @JoinColumn(name = "Movimentacao_condutor", nullable = false)
+    @JoinColumn(name = "condutor", nullable = false)
     private Condutor condutor;
     @Getter @Setter
     @Column(name = "entrada", nullable = false)
     private LocalDateTime entrada;
     @Getter @Setter
-    @Column(name = "saida", nullable = false)
+    @Column(name = "saida")
     private LocalDateTime saida;
     @Getter @Setter
-    @Column(name = "tempoTotalHora")
+    @Column(name = "tempo_total_hora")
     private  Integer tempoTotalHora;
     @Getter @Setter
-    @Column(name = "tempoTotalMinuto")
+    @Column(name = "tempo_total_minuto")
     private int tempoTotalMinuto;
     @Getter @Setter
-    @Column(name = "tempoMultaMinuto")
+    @Column(name = "tempomultaMinuto")
     private int tempoMultaMinuto;
     @Getter @Setter
-    @Column(name = "tempoMultaHora")
+    @Column(name = "tempomultaHora")
     private int tempoMultaHora;
     @Getter @Setter
-    @Column(name = "tempoDesconto")
+    @Column(name = "tempodesconto")
     private int tempoDesconto;
     @Getter @Setter
-    @Column(name = "valor_desconto")
+    @Column(name = "valordesconto")
     private BigDecimal valorDesconto;
     @Getter @Setter
-    @Column(name = "valor_hora", nullable = false,unique = true)
-    private BigDecimal valorHora;
+    @Column(name = "valorhora")
+    private BigDecimal valorHora2;
     @Getter @Setter
-    @Column(name = "valor_multa", nullable = false,unique = true)
+    @Column(name = "valormulta")
     private BigDecimal valorMulta;
     @Getter @Setter
-    @Column(name = "valor_total")
+    @Column(name = "valortotal")
     private BigDecimal valorTotal;
     @Getter @Setter
-    @Column(name = "valor_hora_multa", nullable = false,unique = true)
+    @Column(name = "valorhoramulta")
     private BigDecimal valorHoraMulta;
 
 
@@ -86,11 +83,11 @@ public class Movimentacao extends AbstractEntity{
                         "Tempo Excedido:"  + getTempoMultaMinuto() + " Minutos\n") +
                         ("Tempo De Desconto: " + getTempoDesconto() + " Horas\n\n") +
                         ("#########- PAGAMENTO -##########################################\n") +
-                        ("Valor Por Hora: R$ " + getValorHora() + "\n") +
+                        ("Valor Por Hora: R$ " + getValorHora2() + "\n") +
                         ("Multa por Minuto: R$ " + getValorHoraMulta() + "\n") +
                         ("Desconto: R$ " + "-" + getValorDesconto() + "\n") +
                         ("Valor a pagar de Multa: R$ " + getValorMulta() + "\n") +
-                        ("Total sem Multa: R$ " + (getTempoTotalHora().intValue() - getTempoMultaHora() ) * getValorHora().intValue() + "\n") +
+                        ("Total sem Multa: R$ " + (getTempoTotalHora().intValue() - getTempoMultaHora() ) * getValorHora2().intValue() + "\n") +
                         ("Valor Total: R$ " + getValorTotal()  + "\n");
 
     }}

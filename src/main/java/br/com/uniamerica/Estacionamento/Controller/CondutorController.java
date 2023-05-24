@@ -5,7 +5,6 @@ import br.com.uniamerica.Estacionamento.repository.MovimentacaoRepository;
 import br.com.uniamerica.Estacionamento.service.CondutorService;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +26,14 @@ public class CondutorController {
     /*Metodo GET pra pegar informacoes do nosso banco de dados - nesse caso eu to definindo o caminho para "id"
     o try catch executa o codigo e interrompe caso ocorra algum erro, caso tudo de certo eu chamo a funcao
     procurarCondutor do meu condutorService enviando o id como parametro*/
+    @GetMapping
+    public ResponseEntity<?> idCondutor(@RequestParam("id") final Long id){
+        try{
+            return ResponseEntity.ok(condutorService.procurarCondutor(id));
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body("Erro: " + e.getMessage());
+        }
+    }
 
     /*O primeiro getmapping é diferente na questao do @RequestParam pois eu preciso de um parametro
      que no caso é o id, como nos proximos eu nao preciso, posso colocar dessa maneira*/
@@ -53,27 +60,16 @@ public class CondutorController {
             return ResponseEntity.badRequest().body("Erro: " + e.getMessage());
         }
     }
-    /*Mesma coisa dos metodos anteriores, metodo PUT para editar condutores, dessa vez eu chamo o @RequestParam para
-    identificar o id que devera ser atualizado, e chamo o @RequestBody para indicar que um objeto do tipo condutor
-    vai ser obtido no body da requisicao, como foi explicado antes.*/
-
-    @GetMapping
-    public ResponseEntity<?> idCondutor(@RequestParam("id") final Long id){
-        try{
-            return ResponseEntity.ok(condutorService.procurarCondutor(id));
-        } catch (Exception e){
-            return ResponseEntity.badRequest().body("Erro: " + e.getMessage());
-        }
-    }
     @PutMapping("/{id}")
     public ResponseEntity<?> atualizar(@PathVariable final @NotNull Long id, @RequestBody final Condutor condutor) {
         Optional<Condutor> condutorExistente = condutorRepository.findById(id);
 
-        if (condutorExistente.isPresent()) {
+        if (condutorExistente.isPresent()) { //not null
 
+            //atribui o valor presente dentro do Optional chamado condutorExistente para a variável condutorAtualizado.
             Condutor condutorAtualizado = condutorExistente.get();
 
-
+            //chama atualizarCondutor passando o ID do condutor atualizado e o objeto condutor que vai ser usado pra atualizar os dados
             condutorService.atualizarCondutor(condutorAtualizado.getId(), condutor);
 
             return ResponseEntity.ok().body("Registro atualizado com sucesso");
@@ -102,43 +98,3 @@ public class CondutorController {
         }
     }
 }
-
-    /**/
-   /* @PutMapping
-    public ResponseEntity<?> editarCondutor(@RequestParam("id") final Long id, @RequestBody final  Condutor condutor){
-        try{
-            this.condutorService.editarCondutor(id, condutor);
-            return ResponseEntity.ok("Condutor atualizado");
-        }
-        catch (DataIntegrityViolationException e){
-            return ResponseEntity.internalServerError().body("Erro: " + e.getCause().getCause().getMessage());
-        }
-        catch (RuntimeException e){
-            return ResponseEntity.internalServerError().body("Erro: " + e.getMessage() + condutor.getId());
-        }
-    }*/
-
-  /*  @DeleteMapping
-    public ResponseEntity<?> delete( @RequestParam("id") final Long id){
-        try {
-            this.condutorService.delete(id);
-            return ResponseEntity.ok("Condutor Desativado");
-        } catch (DataIntegrityViolationException e){
-            return ResponseEntity.internalServerError().body("Erro: " + e.getCause().getCause().getMessage());
-        }
-    }*/
-
-
-    /*@PutMapping
-    public ResponseEntity<?> editarCondutor(@RequestParam("id") final Long id, @RequestBody final  Condutor condutor){
-        try{
-            this.condutorService.editarCondutor(id,condutor);
-            return ResponseEntity.ok("Condutor atualizado");
-        }
-        catch (DataIntegrityViolationException e){
-            return ResponseEntity.internalServerError().body("Erro: " + e.getCause().getCause().getMessage());
-        }
-        catch (RuntimeException e){
-            return ResponseEntity.internalServerError().body("Erro:  TA DANDO ERRADO AQ O" + e.getMessage() + condutor.getId());
-        }
-    }*/

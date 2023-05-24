@@ -4,7 +4,6 @@ import br.com.uniamerica.Estacionamento.repository.ConfiguracaoRepository;
 import br.com.uniamerica.Estacionamento.service.ConfiguracaoService;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

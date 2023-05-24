@@ -22,12 +22,12 @@ public class Condutor extends AbstractEntity{
     @Column(name = "telefone",nullable = false,length = 17)
     private String telefone;
     @Getter @Setter
-    @Column(name = "tempo_pago")
+    @Column(name = "tempogasto")
     private int tempoPago;
     @Getter@Setter
-    @Column(name = "tempogasto")
+    @Column(name = "tempototal")
     private int tempoTotal;
     @Getter @Setter
-    @Column(name = "tempoDesconto")
+    @Column(name = "tempodesconto")
     private int tempoDesconto;
    }
