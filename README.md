@@ -1,6 +1,6 @@
 # Estacionamento
 Projeto mensal criando um sistema de controle de estacionamento para o 3o semestre de Analise e Desenvolvimento de software Uniamerica.
->O projeto foi realizado usando JAVA e SQL
+>O projeto foi realizado usando JAVA e SQL\n
 >Ferramentas utilizadas:
 >IntelliJ IDEA
 >Postman API Platform
