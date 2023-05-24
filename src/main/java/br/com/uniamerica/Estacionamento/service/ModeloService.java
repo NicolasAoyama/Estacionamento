@@ -54,7 +54,33 @@ public class ModeloService {
         }
         this.modeloRepository.save(modelo);
     }
-    @Transactional
+    public Modelo atualizarModelo(Long id, Modelo modeloAtualizado) {
+        Modelo modeloExistente = modeloRepository.findById(id).orElse(null);
+        if (modeloExistente == null) {
+            return null;
+        }else{
+
+            modeloExistente.setNomeModelo(modeloAtualizado.getNomeModelo());
+            return modeloRepository.save(modeloExistente);
+        }
+    }
+
+    public boolean excluirModelo(Long id) {
+        Modelo modeloExistente = modeloRepository.findById(id).orElse(null);
+        if (modeloExistente == null) {
+            return false;
+        } else {
+            modeloRepository.delete(modeloExistente);
+            return true;
+        }
+    }
+}
+
+
+
+
+
+    /*@Transactional
     public void attModelo(final Long id, Modelo modelo){
         final Modelo modeloBanco = this.modeloRepository.findById(id).orElse(null);
         if(modeloBanco==null || !modeloBanco.getId().equals(modelo.getId())){
@@ -70,8 +96,8 @@ public class ModeloService {
             throw new RuntimeException("Nome de modelo excedeu o limite (50 caracteres!)");
         }
         this.modeloRepository.save(modelo);
-    }
-    @Transactional(rollbackOn = Exception.class)
+    }*/
+/*@Transactional(rollbackOn = Exception.class)
     public void delete( @RequestParam("id") final Long id) {
         Modelo modelo = this.modeloRepository.findById(id).orElse(null);
         if(modeloRepository.modeloExistente(modelo.getId())){
@@ -80,5 +106,4 @@ public class ModeloService {
         }else {
             modeloRepository.delete(modelo);
         }
-    }
-}
+    }*/

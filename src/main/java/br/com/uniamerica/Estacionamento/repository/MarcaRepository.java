@@ -2,6 +2,7 @@ package br.com.uniamerica.Estacionamento.repository;
 
 import br.com.uniamerica.Estacionamento.Entity.Condutor;
 import br.com.uniamerica.Estacionamento.Entity.Marca;
+import br.com.uniamerica.Estacionamento.Entity.Modelo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,4 +18,7 @@ public interface MarcaRepository extends JpaRepository<Marca, Long> {
     boolean MarcaRepetida(@Param("nome") final String nome);
     @Query(value = "select exists (select * from marcas where condutor = :id)", nativeQuery = true)
     boolean marcaExistente(@Param("id") final Long id);
+
+    @Query("from Modelo where marca = :marca")
+    public List<Modelo> findModeloByMarca(@Param("marca") final Marca marca);
 }

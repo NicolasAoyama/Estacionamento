@@ -2,6 +2,7 @@ package br.com.uniamerica.Estacionamento.service;
 
 import br.com.uniamerica.Estacionamento.Entity.Condutor;
 import br.com.uniamerica.Estacionamento.Entity.Marca;
+import br.com.uniamerica.Estacionamento.Entity.Modelo;
 import br.com.uniamerica.Estacionamento.repository.MarcaRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,42 @@ public class MarcaService {
 
 
 
+
+
+
+    public Marca atualizarMarca(Long id, Marca marcaAtualizada) {
+        Marca marcaExistente = marcaRepository.findById(id).orElse(null);
+        if (marcaExistente == null) {
+            return null;
+        } else {
+            marcaExistente.setNomeMarca(marcaAtualizada.getNomeMarca());
+            return marcaRepository.save(marcaExistente);
+        }
+    }
+
+
+
+
+
     @Transactional(rollbackOn = Exception.class)
+    public void deletar(final Marca marca){
+        final Marca marcaBanco = this.marcaRepository.findById(marca.getId()).orElse(null);
+
+        List<Modelo> modeloLista = this.marcaRepository.findModeloByMarca(marcaBanco);
+
+        if (modeloLista.isEmpty()){
+            this.marcaRepository.delete(marcaBanco);
+        }else{
+            this.marcaRepository.save(marca);
+        }
+        if (marcaBanco != null){
+            marcaBanco.setAtivo(false);
+        }
+    }
+}
+
+
+   /* @Transactional(rollbackOn = Exception.class)
     public void editarMarca(@RequestParam("id")  Long id, @RequestBody Marca marca) {
         final Marca marcabanco = this.marcaRepository.findById(id).orElse(null);
         if (marcabanco == null || !marca.getId().equals(marcabanco.getId())) {
@@ -53,9 +89,9 @@ public class MarcaService {
         if (marcaRepository.MarcaRepetida(marca.getNomeMarca())) {
             throw new RuntimeException("Nome Repetido");}
         marcaRepository.save(marca);
-    }
+    }*/
 
-    @Transactional(rollbackOn = Exception.class)
+/*  @Transactional(rollbackOn = Exception.class)
     public void deletarMarca( @RequestParam("id") final Long id) {
         Marca marca = this.marcaRepository.findById(id).orElse(null);
         if(marcaRepository.marcaExistente(marca.getId())){
@@ -64,26 +100,4 @@ public class MarcaService {
         }else {
             marcaRepository.delete(marca);
         }
-    }
-
-
-
-
-
-
-
-
-
-
-    @Transactional
-    public void attMarca(final Long id, Marca marca){
-        final Marca marcaBanco = this.marcaRepository.findById(id).orElse(null);
-        if(marcaBanco==null || !marcaBanco.getId().equals(marca.getId())){
-            throw new RuntimeException("Registro nao encontrado, verifique e tente novamente");
-        }
-        if(marca.getNomeMarca()==null || marca.getNomeMarca().isEmpty()){
-            throw new RuntimeException("Insira uma marca");
-        }
-        this.marcaRepository.save(marca);
-    }
-}
+    }*/

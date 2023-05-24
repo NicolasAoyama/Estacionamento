@@ -1,14 +1,20 @@
 package br.com.uniamerica.Estacionamento.Controller;
 import br.com.uniamerica.Estacionamento.Entity.Configuracao;
+import br.com.uniamerica.Estacionamento.repository.ConfiguracaoRepository;
 import br.com.uniamerica.Estacionamento.service.ConfiguracaoService;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping (value = "/api/configuracao")
 public class ConfiguracaoController {
+    @Autowired
+    private ConfiguracaoRepository configuracaoRepository;
     @Autowired
     private ConfiguracaoService configuracaoService;
 
@@ -30,7 +36,24 @@ public class ConfiguracaoController {
         }
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
+    public ResponseEntity<?> atualizar(@PathVariable final @NotNull Long id, @RequestBody final Configuracao configuracao) {
+        Optional<Configuracao> configuracaoCriado = configuracaoRepository.findById(id);
+
+        if (configuracaoCriado.isPresent()){
+            Configuracao configuracaoAtualizado = configuracaoCriado.get();
+
+            configuracaoService.atualizarConfiguracao(configuracaoAtualizado.getId(), configuracao);
+
+            return  ResponseEntity.ok().body("Registro de cadastro atulizado com sucesso");
+        }
+        else{
+            return ResponseEntity.badRequest().body("ID não encontrado");
+        }
+    }
+
+}
+ /*@PutMapping
     public ResponseEntity<?> editarConfig(
             @RequestParam("id") final Long id,
             @RequestBody final  Configuracao configuracao
@@ -45,5 +68,4 @@ public class ConfiguracaoController {
         catch (RuntimeException e){
             return ResponseEntity.internalServerError().body("Erro: " + e.getMessage());
         }
-    }
-}
+    }*/

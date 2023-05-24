@@ -17,5 +17,8 @@ public interface VeiculoRepository extends JpaRepository<Veiculo, Long> {
     @Query(value = "select veiculo.id from Veiculo veiculo where veiculo.placa = :placa")
     Long placaExistente(@Param("placa") String placa);
 
+    @Query(value = "select exists (select * from veiculos where placa = :placa)", nativeQuery = true)
+    boolean ProcuraPlaca(@Param("placa") final String placa);
+
 
 }

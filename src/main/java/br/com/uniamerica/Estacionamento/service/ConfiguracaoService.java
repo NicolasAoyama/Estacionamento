@@ -32,7 +32,27 @@ public class ConfiguracaoService {
         }
         this.configuracaoRepository.save(configuracao);
     }
-    @Transactional
+    public Configuracao atualizarConfiguracao(Long id, Configuracao configuracaoAtualizada) {
+        Configuracao configuracaoExistente = configuracaoRepository.findById(1L).orElse(null);
+        if (configuracaoExistente == null) {
+            return null;
+        } else {
+            configuracaoExistente.setValorHora(configuracaoAtualizada.getValorHora());
+            configuracaoExistente.setValorMinutoMulta(configuracaoAtualizada.getValorMinutoMulta());
+            configuracaoExistente.setInicioExpediente(configuracaoAtualizada.getInicioExpediente());
+            configuracaoExistente.setFimExpediente(configuracaoAtualizada.getFimExpediente());
+            configuracaoExistente.setTempoParaDesconto(configuracaoAtualizada.getTempoParaDesconto());
+            configuracaoExistente.setTempoDeDesconto(configuracaoAtualizada.getTempoDeDesconto());
+            configuracaoExistente.setGerarDesconto(configuracaoAtualizada.isGerarDesconto());
+            configuracaoExistente.setVagasMoto(configuracaoAtualizada.getVagasMoto());
+            configuracaoExistente.setVagasCarro(configuracaoAtualizada.getVagasCarro());
+            configuracaoExistente.setVagasVan(configuracaoAtualizada.getVagasVan());
+            return configuracaoRepository.save(configuracaoExistente);
+        }
+    }
+
+}
+/* @Transactional
     public void attConfiguracao(final Long id, Configuracao configuracao){
         final Configuracao configuracaoBanco = this.configuracaoRepository.findById(id).orElse(null);
         if(configuracaoBanco==null || !configuracaoBanco.getId().equals(configuracao.getId())){
@@ -45,5 +65,4 @@ public class ConfiguracaoService {
             throw new RuntimeException("O valor por hora do seu estacionamento nao pode ser 0, verifique e tente novamente");
         }
         this.configuracaoRepository.save(configuracao);
-    }
-}
+    }*/

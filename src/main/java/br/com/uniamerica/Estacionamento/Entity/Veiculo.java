@@ -20,15 +20,16 @@ public class Veiculo extends AbstractEntity{
     private int ano;
     @Getter @Setter
     @ManyToOne
+    @JoinColumn(name="veiculo_modelo",nullable = false)
+    private Modelo modelo;
+    @Getter @Setter
+    @ManyToOne
     @JoinColumn(name="veiculo_marca",nullable = false)
     private Marca marca;
     @Getter @Setter
     @Column(name = "tipo",length = 10,nullable = false)
     @Enumerated(EnumType.STRING)
     private Tipo tipo;
-    @Getter @Setter
-    @ManyToOne
-    @JoinColumn(name="veiculo_modelo",nullable = false)
-    private Modelo modelo;
+
 }
 

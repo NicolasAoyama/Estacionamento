@@ -1,16 +1,27 @@
 package br.com.uniamerica.Estacionamento.Controller;
 
 import br.com.uniamerica.Estacionamento.Entity.Modelo;
+import br.com.uniamerica.Estacionamento.Entity.Veiculo;
+import br.com.uniamerica.Estacionamento.repository.ModeloRepository;
+import br.com.uniamerica.Estacionamento.repository.VeiculoRepository;
 import br.com.uniamerica.Estacionamento.service.ModeloService;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
+
 @RestController
 @RequestMapping (value = "/api/modelo")
 public class ModeloController {
     @Autowired
     private ModeloService modeloService;
+    @Autowired
+    private ModeloRepository modeloRepository;
+    @Autowired
+    private VeiculoRepository veiculoRepository;
 
     @GetMapping
     public ResponseEntity<?> idModelo(@RequestParam("id") final Long id){
@@ -38,7 +49,47 @@ public class ModeloController {
             return ResponseEntity.badRequest().body("Erro: " + e.getMessage());
         }
     }
-    @PutMapping
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> atualizar(@PathVariable final @NotNull Long id, @RequestBody final Modelo modelo) {
+        Optional<Modelo> modeloExistente = modeloRepository.findById(id);
+
+        if (modeloExistente.isPresent()) {
+
+            Modelo modeloAtualizado = modeloExistente.get();
+
+
+            modeloService.atualizarModelo(modeloAtualizado.getId(), modelo);
+
+            return ResponseEntity.ok().body("Registro atualizado com sucesso");
+        } else {
+
+            return ResponseEntity.badRequest().body("ID não encontrado");
+        }
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletar(@PathVariable Long id) {
+        Optional<Modelo> optionalModelo = modeloRepository.findById(id);
+        Optional<Veiculo> optionalVeiculo = veiculoRepository.findById(id);
+
+        if (optionalModelo.isPresent()) {
+            Modelo modelo = optionalModelo.get();
+
+            if (modelo.isAtivo()) {
+                modeloRepository.delete(modelo);
+                return ResponseEntity.ok("O registro do modelo foi deletado com sucesso");
+            } else {
+                modelo.setAtivo(false);
+                modeloRepository.delete(modelo);
+                return ResponseEntity.ok("O modelo estava vinculado a uma ou mais movimentações e foi desativado com sucesso");
+            }
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+}
+
+/*@PutMapping
     public ResponseEntity<?> editarModelo(
             @RequestParam("id") final Long id,
             @RequestBody final  Modelo modelo
@@ -53,8 +104,8 @@ public class ModeloController {
         catch (RuntimeException e){
             return ResponseEntity.internalServerError().body("Erro: " + e.getMessage());
         }
-    }
-    @DeleteMapping
+    }*/
+/*@DeleteMapping
     public ResponseEntity<?> delete( @RequestParam("id") final Long id){
         try {
             this.modeloService.delete(id);
@@ -62,5 +113,4 @@ public class ModeloController {
         } catch (DataIntegrityViolationException e){
             return ResponseEntity.internalServerError().body("Erro: " + e.getCause().getCause().getMessage());
         }
-    }
-}
+    }*/
